@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+﻿import { Link, useRouterState } from "@tanstack/react-router";
 import { Cpu, Store, Wrench, ShoppingCart } from "lucide-react";
 import { useCartContext } from "@/lib/cartContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -49,7 +49,7 @@ export function SiteHeader() {
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
           <div className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-muted-foreground lg:flex">
             <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-            stock live · expédition 48h-7j
+            stock live expedition 48h-7j avec yalidine
           </div>
 
           {/* Theme toggle */}
@@ -77,4 +77,7 @@ export function SiteHeader() {
     </header>
   );
 }
+
+
+
 
