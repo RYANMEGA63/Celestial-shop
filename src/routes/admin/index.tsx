@@ -302,18 +302,11 @@ function AdminDashboard() {
       </div>
 
       {/* Bento Grid */}
-      <div
-        className="grid gap-4"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gridTemplateRows: "auto auto",
-        }}
-      >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Card: Revenus CA — large featured (2x2) */}
         <Link
           to="/admin/orders"
-          className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-md transition-all hover:shadow-[0_8px_40px_-12px_var(--color-success)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          style={{ gridColumn: "span 2", gridRow: "span 2" }}
+          className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-6 backdrop-blur-md transition-all hover:shadow-[0_8px_40px_-12px_var(--color-success)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:col-span-2 sm:row-span-2"
         >
           {/* Backlit glow blob */}
           <div
@@ -372,8 +365,7 @@ function AdminDashboard() {
         {/* Card: Commandes en attente — wide (2x1) */}
         <Link
           to="/admin/orders"
-          className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-md transition-all hover:shadow-[0_8px_40px_-12px_var(--color-warning)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          style={{ gridColumn: "span 2", gridRow: "span 1" }}
+          className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-md transition-all hover:shadow-[0_8px_40px_-12px_var(--color-warning)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:col-span-2"
         >
           <div
             className="pointer-events-none absolute -top-8 -right-8 h-40 w-40 rounded-full blur-3xl"
@@ -421,7 +413,6 @@ function AdminDashboard() {
         <Link
           to="/admin/categories"
           className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-md transition-all hover:shadow-[0_8px_40px_-12px_var(--color-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          style={{ gridColumn: "span 1", gridRow: "span 1" }}
         >
           <div
             className="pointer-events-none absolute -bottom-6 -left-6 h-28 w-28 rounded-full blur-2xl"
@@ -454,7 +445,6 @@ function AdminDashboard() {
         <Link
           to="/admin/products"
           className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-md transition-all hover:shadow-[0_8px_40px_-12px_var(--color-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          style={{ gridColumn: "span 1", gridRow: "span 1" }}
         >
           <div
             className="pointer-events-none absolute -bottom-6 -right-6 h-28 w-28 rounded-full blur-2xl"

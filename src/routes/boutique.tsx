@@ -74,7 +74,7 @@ function Boutique() {
   const isLoading = loadingCats || loadingProducts;
 
   return (
-    <main className="mx-auto max-w-[1400px] px-4 py-8">
+    <main className="mx-auto max-w-[1400px] px-3 py-6 sm:px-4 sm:py-8">
       {/* Page header */}
       <div className="mb-6">
         <div className="font-mono text-[11px] uppercase tracking-widest text-primary">
@@ -89,7 +89,7 @@ function Boutique() {
       </div>
 
       {/* Top filter bar */}
-      <div className="mb-6 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
+      <div className="mb-6 flex flex-col items-stretch gap-3 rounded-lg border border-border bg-card px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:px-4">
         {/* All button */}
         <button
           onClick={() => setCatId("all")}
@@ -121,7 +121,7 @@ function Boutique() {
         <div className="hidden sm:block h-6 w-px bg-border shrink-0" />
 
         {/* Search bar */}
-        <div className="relative shrink-0 w-56">
+        <div className="relative w-full shrink-0 sm:w-56">
           <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={q}
@@ -161,7 +161,7 @@ function Boutique() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {filtered.map((p) => (
             <ProductCard
               key={p.id}

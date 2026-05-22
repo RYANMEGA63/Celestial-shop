@@ -207,7 +207,8 @@ function AdminCategories() {
             Aucune catégorie. Créez-en une ci-dessus.
           </div>
         ) : (
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="min-w-[760px] w-full">
             <thead>
                <tr className="border-b border-border bg-muted/40">
                  <th className="px-4 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -361,6 +362,7 @@ function AdminCategories() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

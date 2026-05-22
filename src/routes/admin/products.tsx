@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
@@ -249,7 +249,7 @@ function AdminProducts() {
       qc.invalidateQueries({ queryKey: ["admin-products-count"] });
       setShowForm(false);
       toast.success(
-        editingProduct ? "Produit mis à jour !" : "Produit créé !"
+        editingProduct ? "Produit mis Ã  jour !" : "Produit crÃ©Ã© !"
       );
     },
     onError: (e: Error) => {
@@ -266,7 +266,7 @@ function AdminProducts() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["products"] });
       qc.invalidateQueries({ queryKey: ["admin-products-count"] });
-      toast.success("Produit supprimé");
+      toast.success("Produit supprimÃ©");
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -339,7 +339,7 @@ function AdminProducts() {
               />
               {imageFile && (
                 <p className="mt-1.5 font-mono text-[10px] text-primary">
-                  ✓ {imageFile.name}
+                  âœ“ {imageFile.name}
                 </p>
               )}
             </div>
@@ -366,14 +366,14 @@ function AdminProducts() {
 
               {/* Row 2 */}
               <div className="grid gap-3 sm:grid-cols-2">
-                <Field label="Catégorie">
+                <Field label="CatÃ©gorie">
                   <div className="relative">
                     <select
                       value={form.category_id}
                       onChange={(e) => handleCategoryChange(e.target.value)}
                       className="h-9 w-full appearance-none rounded-md border border-border bg-background px-3 pr-8 font-mono text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
                     >
-                      <option value="">Aucune cat�gorie</option>
+                      <option value="">Aucune catégorie</option>
                       {categories.map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.label}
@@ -407,7 +407,7 @@ function AdminProducts() {
               {/* Compatibility */}
               <details className="group rounded-md border border-border">
                 <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
-                  Compatibilité (optionnel)
+                  CompatibilitÃ© (optionnel)
                   <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
                 </summary>
                 <div className="grid gap-3 border-t border-border p-3 sm:grid-cols-3">
@@ -432,7 +432,7 @@ function AdminProducts() {
                       className="h-8 text-sm"
                     />
                   </Field>
-                  <Field label="Format (ATX, ITX…)">
+                  <Field label="Format (ATX, ITXâ€¦)">
                     <Input
                       value={form.form_factor}
                       onChange={(e) => setField("form_factor", e.target.value)}
@@ -454,7 +454,7 @@ function AdminProducts() {
               {Object.keys(categorySpecs).length > 0 && (
                 <div className="space-y-3 rounded-lg border border-border bg-muted/20 p-4">
                   <label className="block font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                    // Fiche technique (Attributs de la catégorie)
+                    // Fiche technique (Attributs de la catÃ©gorie)
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {Object.entries(categorySpecs).map(([key, value]) => (
@@ -482,7 +482,7 @@ function AdminProducts() {
               <div>
                 <div className="mb-2 flex items-center justify-between">
                   <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    Attributs spéciaux / additionnels
+                    Attributs spÃ©ciaux / additionnels
                   </label>
                   <button
                     onClick={() =>
@@ -548,12 +548,12 @@ function AdminProducts() {
               }
             >
               {uploading
-                ? "Upload photo…"
+                ? "Upload photoâ€¦"
                 : saveMutation.isPending
-                ? "Enregistrement…"
+                ? "Enregistrementâ€¦"
                 : editingProduct
-                ? "Mettre à jour"
-                : "Créer le produit"}
+                ? "Mettre Ã  jour"
+                : "CrÃ©er le produit"}
             </Button>
           </div>
         </div>
@@ -563,14 +563,15 @@ function AdminProducts() {
       <div className="rounded-lg border border-border overflow-hidden bg-card">
         {isLoading ? (
           <div className="py-12 text-center font-mono text-xs text-muted-foreground">
-            Chargement…
+            Chargementâ€¦
           </div>
         ) : products.length === 0 ? (
           <div className="py-12 text-center font-mono text-xs text-muted-foreground">
             Aucun produit. Cliquez sur "Nouveau produit" pour commencer.
           </div>
         ) : (
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="min-w-[720px] w-full">
             <thead>
               <tr className="border-b border-border bg-muted/40">
                 <th className="px-4 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground w-16" />
@@ -578,7 +579,7 @@ function AdminProducts() {
                   Produit
                 </th>
                 <th className="px-4 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Catégorie
+                  CatÃ©gorie
                 </th>
                 <th className="px-4 py-2.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Prix
@@ -615,7 +616,7 @@ function AdminProducts() {
                   </td>
                   <td className="px-4 py-2.5">
                     <span className="rounded-md border border-border bg-muted/40 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
-                      {(p.category as Category)?.label ?? "—"}
+                      {(p.category as Category)?.label ?? "â€”"}
                     </span>
                   </td>
                   <td className="px-4 py-2.5 text-right font-mono font-semibold text-success">
@@ -644,6 +645,7 @@ function AdminProducts() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
@@ -666,4 +668,5 @@ function Field({
     </div>
   );
 }
+
 

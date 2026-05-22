@@ -60,7 +60,7 @@ const STEPS = [
 
 function Stepper({ current }: { current: number }) {
   return (
-    <div className="flex items-center justify-between w-full max-w-xl mx-auto px-4 mb-10">
+    <div className="mx-auto mb-10 flex w-full max-w-xl items-center justify-between px-0 sm:px-4">
       {STEPS.map((step, i) => {
         const Icon = step.icon;
         const isDone = current > step.id;
@@ -71,7 +71,7 @@ function Stepper({ current }: { current: number }) {
             {/* Step Circle with cyber design */}
             <div className="flex flex-col items-center relative group">
               <div
-                className={`relative flex h-10 w-10 items-center justify-center rounded-lg border transition-all duration-300 font-mono text-xs font-bold ${
+                className={`relative flex h-9 w-9 items-center justify-center rounded-lg border font-mono text-xs font-bold transition-all duration-300 sm:h-10 sm:w-10 ${
                   isDone
                     ? "border-emerald-500 bg-emerald-500/10 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
                     : isActive
@@ -91,9 +91,9 @@ function Stepper({ current }: { current: number }) {
               </div>
 
               {/* Label */}
-              <div className="absolute top-12 whitespace-nowrap flex flex-col items-center">
+              <div className="absolute top-11 flex w-16 flex-col items-center text-center sm:top-12 sm:w-auto">
                 <span
-                  className={`font-mono text-[10px] uppercase tracking-widest transition-colors duration-300 ${
+                  className={`font-mono text-[8px] uppercase tracking-wider transition-colors duration-300 sm:text-[10px] sm:tracking-widest ${
                     isActive
                       ? "text-primary font-semibold"
                       : isDone
@@ -108,7 +108,7 @@ function Stepper({ current }: { current: number }) {
 
             {/* SVG Connecting Line with Emerald Gradient */}
             {i < STEPS.length - 1 && (
-              <div className="flex-1 flex items-center mx-2 sm:mx-4">
+              <div className="mx-1 flex flex-1 items-center sm:mx-4">
                 <svg className="w-full h-2" viewBox="0 0 100 8" preserveAspectRatio="none" fill="none">
                   {/* Background thin dashed line */}
                   <line
@@ -341,10 +341,8 @@ function CommanderPage() {
   const selectedWilaya = wilayas.find((w) => String(w.id) === form.wilaya_id);
   const rawDeliveryCost = selectedWilaya?.delivery_cost ?? 0;
   
-  // Calculate delivery cost based on office vs home delivery
-  const deliveryCost = form.delivery_type === "bureau"
-    ? Math.max(0, rawDeliveryCost - 200)
-    : rawDeliveryCost;
+  // Delivery: home varies by wilaya, office pickup is free.
+  const deliveryCost = form.delivery_type === "domicile" ? rawDeliveryCost : 0;
     
   const totalWithDelivery = totalPrice + deliveryCost;
 
@@ -437,9 +435,7 @@ function CommanderPage() {
     try {
       const wilaya = wilayas.find((w) => String(w.id) === form.wilaya_id)!;
 
-      const finalDeliveryCost = form.delivery_type === "bureau"
-        ? Math.max(0, wilaya.delivery_cost - 200)
-        : wilaya.delivery_cost;
+      const finalDeliveryCost = form.delivery_type === "domicile" ? wilaya.delivery_cost : 0;
       const finalTotal = totalPrice + finalDeliveryCost;
 
       // Insert order
@@ -493,13 +489,13 @@ function CommanderPage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
+    <main className="mx-auto max-w-3xl px-3 py-6 sm:px-4 sm:py-8">
       {/* Header */}
-      <div className="mb-8 border-b border-white/5 pb-4">
+      <div className="mb-8 border-b border-border/50 pb-4">
         <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
           // Système de Commande
         </div>
-        <h1 className="mt-1 text-3xl font-extrabold tracking-tight">Finaliser ma commande</h1>
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Finaliser ma commande</h1>
       </div>
 
       {/* Stepper */}
@@ -510,11 +506,11 @@ function CommanderPage() {
       {/* ── Step 1: Cart recap ── */}
       {step === 1 && (
         <div className="space-y-6">
-          <div className="rounded-xl border border-white/10 bg-black/20 backdrop-blur-md overflow-hidden relative">
+          <div className="rounded-xl border border-border/70 bg-card/60 backdrop-blur-md overflow-hidden relative">
             <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/45" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/45" />
             
-            <div className="border-b border-white/10 px-5 py-4 bg-white/[0.02]">
+            <div className="border-b border-border/60 px-5 py-4 bg-muted/25">
               <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
                 // Récapitulatif du Panier
               </span>
@@ -522,15 +518,15 @@ function CommanderPage() {
             
             <div className="divide-y divide-white/5">
               {items.map((item) => (
-                <div key={item.cartId} className="flex items-center gap-4 px-5 py-4">
+                <div key={item.cartId} className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
                   {item.image_url ? (
                     <img
                       src={item.image_url}
                       alt={item.name}
-                      className="h-14 w-14 shrink-0 rounded-lg object-cover border border-white/10"
+                      className="h-14 w-14 shrink-0 rounded-lg object-cover border border-border/60"
                     />
                   ) : (
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-muted/35">
                       <Package className="h-6 w-6 text-muted-foreground/30" />
                     </div>
                   )}
@@ -548,7 +544,7 @@ function CommanderPage() {
                         {(item.specs as CartItemSpec[]).map((s, i) => (
                           <span
                             key={i}
-                            className="rounded bg-white/5 border border-white/5 px-2 py-0.5 font-mono text-[9px] text-muted-foreground"
+                            className="rounded bg-muted/35 border border-border/50 px-2 py-0.5 font-mono text-[9px] text-muted-foreground"
                           >
                             {s.category}: {s.product}
                           </span>
@@ -557,7 +553,7 @@ function CommanderPage() {
                     )}
                   </div>
                   
-                  <div className="shrink-0 text-right">
+                  <div className="shrink-0 text-left sm:text-right">
                     <div className="font-mono text-sm font-bold text-foreground">
                       {(item.unit_price * item.quantity).toLocaleString("fr-DZ")} DA
                     </div>
@@ -571,7 +567,7 @@ function CommanderPage() {
               ))}
             </div>
             
-            <div className="border-t border-white/10 bg-white/[0.01] px-5 py-4 flex justify-between items-center">
+            <div className="border-t border-border/60 bg-muted/20 px-5 py-4 flex justify-between items-center">
               <span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Sous-total</span>
               <span className="font-mono text-base font-bold text-foreground">
                 {totalPrice.toLocaleString("fr-DZ")} DA
@@ -579,16 +575,16 @@ function CommanderPage() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center pt-2">
+          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
             <Link
               to="/panier"
-              className="rounded-lg border border-white/10 px-5 py-2.5 text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-white/20 transition-all"
+              className="rounded-lg border border-border/70 px-5 py-2.5 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground transition-all hover:border-border hover:text-foreground"
             >
               ← Modifier le panier
             </Link>
             <button
               onClick={() => setStep(2)}
-              className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-all shadow-[0_4px_25px_-8px_var(--color-primary)]"
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_4px_25px_-8px_var(--color-primary)] transition-all hover:bg-primary/95"
             >
               Informations de livraison
               <ChevronRight className="h-4 w-4" />
@@ -699,7 +695,7 @@ function CommanderPage() {
                   className={`relative flex flex-col p-5 rounded-xl border-2 transition-all duration-300 cursor-pointer backdrop-blur-md overflow-hidden ${
                     form.delivery_type === "domicile"
                       ? "border-emerald-500 bg-emerald-500/[0.03] shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-                      : "border-white/5 bg-black/40 hover:border-white/10 hover:bg-black/50"
+                      : "border-border/60 bg-card/50 hover:border-border hover:bg-card/65"
                   }`}
                 >
                   <div className="flex items-start gap-4">
@@ -707,7 +703,7 @@ function CommanderPage() {
                       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border transition-all ${
                         form.delivery_type === "domicile"
                           ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                          : "border-white/10 bg-white/5 text-muted-foreground/60"
+                          : "border-border/60 bg-muted/35 text-muted-foreground/70"
                       }`}
                     >
                       <Truck className="h-5 w-5" />
@@ -730,9 +726,6 @@ function CommanderPage() {
                         </div>
                       )}
                       
-                      <div className="mt-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground/50">
-                        Délai moyen : 2 - 5 jours
-                      </div>
                     </div>
                   </div>
 
@@ -740,7 +733,7 @@ function CommanderPage() {
                     className={`absolute top-3 right-3 font-mono text-[8px] tracking-widest uppercase px-1.5 py-0.5 rounded border transition-all ${
                       form.delivery_type === "domicile"
                         ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                        : "border-white/5 bg-white/5 text-muted-foreground/30"
+                        : "border-border/40 bg-muted/25 text-muted-foreground/40"
                     }`}
                   >
                     {form.delivery_type === "domicile" ? "[ ACTIF ]" : "[ SÉLECTIONNER ]"}
@@ -753,7 +746,7 @@ function CommanderPage() {
                   className={`relative flex flex-col p-5 rounded-xl border-2 transition-all duration-300 cursor-pointer backdrop-blur-md overflow-hidden ${
                     form.delivery_type === "bureau"
                       ? "border-emerald-500 bg-emerald-500/[0.03] shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-                      : "border-white/5 bg-black/40 hover:border-white/10 hover:bg-black/50"
+                      : "border-border/60 bg-card/50 hover:border-border hover:bg-card/65"
                   }`}
                 >
                   <div className="flex items-start gap-4">
@@ -761,7 +754,7 @@ function CommanderPage() {
                       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border transition-all ${
                         form.delivery_type === "bureau"
                           ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                          : "border-white/10 bg-white/5 text-muted-foreground/60"
+                          : "border-border/60 bg-muted/35 text-muted-foreground/70"
                       }`}
                     >
                       <Building className="h-5 w-5" />
@@ -775,23 +768,9 @@ function CommanderPage() {
                         Retrait au Bureau
                       </h4>
                       <p className="mt-1.5 text-[11px] text-muted-foreground leading-relaxed">
-                        Retrait direct en agence de transport partenaire (stop-desk).
+                        Retrait directement à notre bureau (présence du client requise).
                       </p>
 
-                      {selectedWilaya && (
-                        <div className="mt-4 flex items-baseline gap-2">
-                          <span className="font-mono text-xs font-bold text-foreground">
-                            Tarif : {deliveryCost.toLocaleString("fr-DZ")} DA
-                          </span>
-                          <span className="font-mono text-[9px] text-emerald-400 bg-emerald-400/10 px-1 py-0.5 rounded font-semibold">
-                            -200 DA
-                          </span>
-                        </div>
-                      )}
-
-                      <div className="mt-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground/50">
-                        Délai moyen : 1 - 3 jours
-                      </div>
                     </div>
                   </div>
 
@@ -799,7 +778,7 @@ function CommanderPage() {
                     className={`absolute top-3 right-3 font-mono text-[8px] tracking-widest uppercase px-1.5 py-0.5 rounded border transition-all ${
                       form.delivery_type === "bureau"
                         ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
-                        : "border-white/5 bg-white/5 text-muted-foreground/30"
+                        : "border-border/40 bg-muted/25 text-muted-foreground/40"
                     }`}
                   >
                     {form.delivery_type === "bureau" ? "[ ACTIF ]" : "[ SÉLECTIONNER ]"}
@@ -816,10 +795,10 @@ function CommanderPage() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center pt-2">
+          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
             <button
               onClick={() => setStep(1)}
-              className="rounded-lg border border-white/10 px-5 py-2.5 text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-white/20 transition-all"
+              className="rounded-lg border border-border/70 px-5 py-2.5 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground transition-all hover:border-border hover:text-foreground"
             >
               ← Retour
             </button>
@@ -827,7 +806,7 @@ function CommanderPage() {
               onClick={() => {
                 if (validateForm()) setStep(3);
               }}
-              className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-all shadow-[0_4px_25px_-8px_var(--color-primary)]"
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_4px_25px_-8px_var(--color-primary)] transition-all hover:bg-primary/95"
             >
               Vérifier ma commande
               <ChevronRight className="h-4 w-4" />
@@ -840,11 +819,11 @@ function CommanderPage() {
       {step === 3 && (
         <div className="space-y-6">
           {/* final items check */}
-          <div className="rounded-xl border border-white/10 bg-black/20 backdrop-blur-md overflow-hidden relative">
+          <div className="rounded-xl border border-border/70 bg-card/60 backdrop-blur-md overflow-hidden relative">
             <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/45" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/45" />
             
-            <div className="border-b border-white/10 px-5 py-4 bg-white/[0.02] font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
+            <div className="border-b border-border/60 px-5 py-4 bg-muted/25 font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
               // Facturation Finale
             </div>
             
@@ -855,10 +834,10 @@ function CommanderPage() {
                     <img
                       src={item.image_url}
                       alt={item.name}
-                      className="h-10 w-10 shrink-0 rounded-md object-cover border border-white/10"
+                      className="h-10 w-10 shrink-0 rounded-md object-cover border border-border/60"
                     />
                   ) : (
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/60 bg-muted/35">
                       <Package className="h-4 w-4 text-muted-foreground/30" />
                     </div>
                   )}
@@ -870,7 +849,7 @@ function CommanderPage() {
               ))}
             </div>
 
-            <div className="border-t border-white/10 bg-white/[0.01] px-5 py-4 space-y-2">
+            <div className="border-t border-border/60 bg-muted/20 px-5 py-4 space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="text-muted-foreground font-mono uppercase tracking-wider text-[10px]">Sous-total</span>
                 <span className="font-mono text-foreground">{totalPrice.toLocaleString("fr-DZ")} DA</span>
@@ -883,7 +862,7 @@ function CommanderPage() {
                   {deliveryCost.toLocaleString("fr-DZ")} DA
                 </span>
               </div>
-              <div className="flex justify-between border-t border-white/10 pt-3 mt-1 font-bold text-sm">
+              <div className="flex justify-between border-t border-border/60 pt-3 mt-1 font-bold text-sm">
                 <span className="font-mono uppercase tracking-widest text-xs">Total à payer</span>
                 <span className="font-mono text-primary text-base">
                   {totalWithDelivery.toLocaleString("fr-DZ")} DA
@@ -893,7 +872,7 @@ function CommanderPage() {
           </div>
 
           {/* Customer details recap */}
-          <div className="rounded-xl border border-white/10 bg-black/25 backdrop-blur-md p-6 relative">
+          <div className="rounded-xl border border-border/70 bg-card/55 backdrop-blur-md p-6 relative">
             <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/45" />
             <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/45" />
 
@@ -902,52 +881,52 @@ function CommanderPage() {
             </div>
 
             <div className="grid gap-y-3 gap-x-8 text-sm sm:grid-cols-2">
-              <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+              <div className="flex flex-col gap-1 border-b border-border/50 pb-2">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Destinataire</span>
                 <span className="font-semibold text-foreground">{form.customer_name}</span>
               </div>
               {form.company && (
-                <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+                <div className="flex flex-col gap-1 border-b border-border/50 pb-2">
                   <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Entreprise</span>
                   <span className="font-semibold text-foreground">{form.company}</span>
                 </div>
               )}
-              <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+              <div className="flex flex-col gap-1 border-b border-border/50 pb-2">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Email</span>
                 <span className="font-semibold text-foreground">{form.email}</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+              <div className="flex flex-col gap-1 border-b border-border/50 pb-2">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Téléphone</span>
                 <span className="font-semibold text-foreground">{form.phone}</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-white/5 pb-2 sm:col-span-2">
+              <div className="flex flex-col gap-1 border-b border-border/50 pb-2 sm:col-span-2">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Adresse</span>
                 <span className="font-semibold text-foreground">{form.address}</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+              <div className="flex flex-col gap-1 border-b border-border/50 pb-2">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Wilaya</span>
                 <span className="font-semibold text-foreground">{selectedWilaya?.name}</span>
               </div>
-              <div className="flex flex-col gap-1 border-b border-white/5 pb-2">
+              <div className="flex flex-col gap-1 border-b border-border/50 pb-2">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/60">Type de livraison</span>
                 <span className="font-semibold text-foreground capitalize">
-                  {form.delivery_type === "bureau" ? "Retrait au Bureau (-200 DA)" : "Livraison à Domicile"}
+                  {form.delivery_type === "bureau" ? "Retrait au Bureau" : "Livraison à Domicile"}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="flex justify-between items-center pt-2">
+          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
             <button
               onClick={() => setStep(2)}
-              className="rounded-lg border border-white/10 px-5 py-2.5 text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-white/20 transition-all"
+              className="rounded-lg border border-border/70 px-5 py-2.5 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground transition-all hover:border-border hover:text-foreground"
             >
               ← Modifier
             </button>
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/95 transition-all disabled:opacity-60 shadow-[0_4px_25px_-8px_var(--color-primary)]"
+              className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_4px_25px_-8px_var(--color-primary)] transition-all hover:bg-primary/95 disabled:opacity-60"
             >
               {submitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

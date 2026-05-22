@@ -73,7 +73,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Celestial Shop — Composants & Configurateur sur mesure" },
-      { name: "description", content: "E-commerce de composants PC et configurateur sur mesure pour gamers, pros et IA." },
+      { name: "description", content: "E-commerce de composants PC et configurateur sur mesure pour gaming, travail et création." },
+      { name: "keywords", content: "composants PC, configurateur PC, gaming, workstation, Algérie" },
+      { name: "robots", content: "index, follow" },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Celestial Shop" },
+      { property: "og:title", content: "Celestial Shop - Composants & Configurateur sur mesure" },
+      { property: "og:description", content: "Composants PC et configurateur sur mesure pour gaming, travail et création." },
+      { property: "og:locale", content: "fr_FR" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Celestial Shop - Composants & Configurateur sur mesure" },
+      { name: "twitter:description", content: "Composants PC et configurateur sur mesure pour gaming, travail et création." },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -110,9 +120,6 @@ function RootComponent() {
                 <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-3 px-4 sm:flex-row sm:items-center">
                   <div className="font-mono text-xs text-muted-foreground">
                     Celestial Shop · Assemblage en Algérie
-                  </div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    v1.0 · build live
                   </div>
                 </div>
               </footer>

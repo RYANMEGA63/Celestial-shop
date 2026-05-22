@@ -135,7 +135,7 @@ function SlidingTabs({ active, onChange, counts }: SlidingTabsProps) {
   return (
     <div
       ref={containerRef}
-      className="relative flex items-center gap-0.5 rounded-xl border border-border bg-muted/20 p-1"
+      className="relative flex items-center gap-0.5 overflow-x-auto rounded-xl border border-border bg-muted/20 p-1"
       role="tablist"
       aria-label="Filtrer les commandes"
     >
@@ -161,7 +161,7 @@ function SlidingTabs({ active, onChange, counts }: SlidingTabsProps) {
             role="tab"
             aria-selected={isActive}
             onClick={() => onChange(tab.key)}
-            className="relative z-10 flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="relative z-10 flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             style={{
               color: isActive ? "var(--color-primary)" : "var(--color-muted-foreground)",
               fontWeight: isActive ? 600 : 400,
@@ -263,8 +263,8 @@ function OrderDrawer({ order, open, onClose, onStatusChange, isMutating }: Drawe
         {displayOrder ? (
           <>
             {/* Drawer Header */}
-            <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <div>
+            <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-4 sm:px-5">
+              <div className="min-w-0">
                 <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
                   // Détails commande
                 </div>
@@ -272,7 +272,7 @@ function OrderDrawer({ order, open, onClose, onStatusChange, isMutating }: Drawe
                   N° {displayOrder.id.split("-")[0].toUpperCase()}
                 </h2>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex shrink-0 items-center gap-2 sm:gap-3">
                 <StatusBadge status={displayOrder.status} />
                 <button
                   onClick={onClose}
@@ -285,7 +285,7 @@ function OrderDrawer({ order, open, onClose, onStatusChange, isMutating }: Drawe
             </div>
 
             {/* Scrollable content */}
-            <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
+            <div className="flex-1 space-y-5 overflow-y-auto px-4 py-5 sm:px-5">
               {/* Status Update Actions */}
               <div className="space-y-2">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -410,7 +410,7 @@ function OrderDrawer({ order, open, onClose, onStatusChange, isMutating }: Drawe
                       key={item.id}
                       className="rounded-lg border border-border bg-muted/10 p-3 text-xs space-y-1"
                     >
-                      <div className="flex items-start justify-between gap-2">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
                         <span className="font-semibold text-foreground">
                           {item.name}{" "}
                           <span className="text-muted-foreground font-normal">x{item.quantity}</span>
@@ -445,7 +445,7 @@ function OrderDrawer({ order, open, onClose, onStatusChange, isMutating }: Drawe
             </div>
 
             {/* Drawer Footer: totals */}
-            <div className="border-t border-border px-5 py-4 space-y-1.5 bg-card">
+            <div className="space-y-1.5 border-t border-border bg-card px-4 py-4 sm:px-5">
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Sous-total</span>
                 <span className="font-mono tabular-nums">
@@ -561,7 +561,7 @@ function AdminOrders() {
         <div className="font-mono text-[11px] uppercase tracking-widest text-primary">
           // Commandes
         </div>
-        <h1 className="mt-1 text-2xl font-bold">Gestion des commandes</h1>
+        <h1 className="mt-1 text-xl font-bold sm:text-2xl">Gestion des commandes</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Gérez les commandes des clients, suivez leur état d'avancement et visualisez les détails
           des configurations.
@@ -581,7 +581,7 @@ function AdminOrders() {
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       ) : orders.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/25 p-16 text-center text-muted-foreground text-sm">
+        <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card/25 p-8 text-center text-sm text-muted-foreground sm:p-16">
           <Package className="h-8 w-8 text-muted-foreground/30" />
           Aucune commande trouvée pour ce statut.
         </div>
@@ -607,7 +607,7 @@ function AdminOrders() {
                     : "none",
                 }}
               >
-                <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-mono text-xs font-bold uppercase tracking-wider text-foreground">
@@ -633,7 +633,7 @@ function AdminOrders() {
                     </div>
                   </div>
 
-                  <div className="shrink-0 text-right">
+                  <div className="shrink-0 text-left sm:text-right">
                     <div className="font-mono text-sm font-bold text-foreground tabular-nums">
                       {order.total.toLocaleString("fr-DZ")} DA
                     </div>

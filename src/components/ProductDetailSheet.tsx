@@ -32,11 +32,11 @@ export function ProductDetailSheet({
       <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-xl">
         {product && (
           <div className="flex h-full flex-col">
-            <SheetHeader className="border-b border-border p-5">
+            <SheetHeader className="border-b border-border p-4 sm:p-5">
               <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
                 {categoryLabel} · {product.brand}
               </div>
-              <SheetTitle className="text-2xl">{product.name}</SheetTitle>
+              <SheetTitle className="text-xl sm:text-2xl">{product.name}</SheetTitle>
               <SheetDescription>{product.tagline}</SheetDescription>
             </SheetHeader>
 
@@ -54,18 +54,18 @@ export function ProductDetailSheet({
               )}
             </div>
 
-            <div className="flex items-center justify-between border-b border-border bg-muted/40 px-5 py-3">
+            <div className="flex flex-col gap-3 border-b border-border bg-muted/40 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
               <div>
                 <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Prix TTC
                 </div>
-                <div className="font-mono text-2xl font-bold text-success">
+                <div className="font-mono text-xl font-bold text-success sm:text-2xl">
                   {Number(product.price).toLocaleString("fr-FR")} DA
                 </div>
               </div>
               <Button
                 onClick={() => onAdd?.(product)}
-                className="bg-success text-success-foreground hover:bg-success/90"
+                className="w-full bg-success text-success-foreground hover:bg-success/90 sm:w-auto"
                 size="lg"
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
@@ -73,7 +73,7 @@ export function ProductDetailSheet({
               </Button>
             </div>
 
-            <div className="p-5">
+            <div className="p-4 sm:p-5">
               <div className="mb-2 flex items-center justify-between">
                 <h3 className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                   Fiche technique
@@ -88,8 +88,8 @@ export function ProductDetailSheet({
                   Aucun attribut renseigné.
                 </p>
               ) : (
-                <div className="overflow-hidden rounded-md border border-border">
-                  <table className="spec-table w-full">
+                <div className="overflow-x-auto rounded-md border border-border">
+                  <table className="spec-table min-w-[420px] w-full">
                     <tbody>
                       {Object.entries(product.specs ?? {}).map(([k, v], i) => (
                         <tr

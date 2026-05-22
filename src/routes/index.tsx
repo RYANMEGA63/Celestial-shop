@@ -14,7 +14,15 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Celestial Shop — Composants & PC sur mesure" },
-      { name: "description", content: "Composants PC dernière génération et configurateur sur mesure : gaming, workstation et IA." },
+      { name: "description", content: "Composants PC dernière génération et configurateur sur mesure : gaming, workstation et création." },
+      { name: "keywords", content: "PC gamer, workstation, composants PC, configurateur PC, boutique informatique" },
+      { name: "robots", content: "index, follow" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Celestial Shop - Composants & PC sur mesure" },
+      { property: "og:description", content: "Composants PC dernière génération et configurateur sur mesure pour gaming, workstation et création." },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Celestial Shop - Composants & PC sur mesure" },
+      { name: "twitter:description", content: "Composants PC dernière génération et configurateur sur mesure pour gaming, workstation et création." },
     ],
     links: [
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" }
@@ -23,12 +31,12 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-type Universe = "gaming" | "pro" | "ai";
+type Universe = "gaming" | "pro" | "creation";
 
 const universes: { id: Universe; title: string; subtitle: string; icon: typeof Cpu; accent: string }[] = [
   { id: "gaming", title: "Gaming / Stream", subtitle: "Frame rate, latence, RGB", icon: Gamepad2, accent: "from-primary/30 to-primary/5" },
   { id: "pro", title: "Professionnel / Travail", subtitle: "Fiabilité, multi-tâche, silence", icon: Briefcase, accent: "from-success/30 to-success/5" },
-  { id: "ai", title: "Calcul IA / Deep Learning", subtitle: "VRAM, CUDA, FP16/8", icon: Brain, accent: "from-primary/20 to-success/10" },
+  { id: "creation", title: "Création / Rendu", subtitle: "VRAM, CUDA, performance", icon: Brain, accent: "from-primary/20 to-success/10" },
 ];
 
 function Home() {
@@ -69,19 +77,19 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 grid-bg opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/70 to-primary/5" />
-        <div className="relative mx-auto grid max-w-[1400px] gap-10 px-4 py-16 md:grid-cols-2 md:py-24">
+        <div className="relative mx-auto grid max-w-[1400px] gap-8 px-3 py-10 sm:px-4 sm:py-16 md:grid-cols-2 md:py-24">
           <div className="flex flex-col justify-center">
             <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-primary">
               <Zap className="h-3 w-3" /> Nouveau · Dream PC Builder
             </div>
-            <h1 className="text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+            <h1 className="text-3xl font-bold leading-[1.05] tracking-tight sm:text-4xl md:text-6xl">
               Assemblez la machine
               <br />
               <span className="text-primary">qui vous ressemble.</span>
             </h1>
             <p className="mt-5 max-w-lg text-base text-muted-foreground md:text-lg">
               Composants triés sur le volet, compatibilité garantie par notre moteur,
-              assemblage humain. Du build esport au rig deep-learning.
+              assemblage humain. Du build esport à la station de création.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button
@@ -102,11 +110,6 @@ function Home() {
                 <Link to="/boutique">Explorer le catalogue</Link>
               </Button>
             </div>
-            <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-border pt-6 font-mono text-xs">
-              <div><dt className="text-muted-foreground">Builds livrés</dt><dd className="text-lg font-bold text-foreground">12 480</dd></div>
-              <div><dt className="text-muted-foreground">Compat. testée</dt><dd className="text-lg font-bold text-success">100%</dd></div>
-              <div><dt className="text-muted-foreground">Garantie</dt><dd className="text-lg font-bold text-foreground">3 ans</dd></div>
-            </dl>
           </div>
 
           {/* Animated robotic assembly */}
@@ -117,11 +120,11 @@ function Home() {
       </section>
 
       {/* UNIVERSES */}
-      <section className="mx-auto max-w-[1400px] px-4 py-16">
-        <div className="mb-8 flex items-end justify-between">
+      <section className="mx-auto max-w-[1400px] px-3 py-12 sm:px-4 sm:py-16">
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="font-mono text-[11px] uppercase tracking-widest text-primary">// Univers</div>
-            <h2 className="mt-1 text-3xl font-bold">Choisissez votre terrain de jeu</h2>
+            <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Choisissez votre terrain de jeu</h2>
           </div>
           <Link to="/boutique" className="hidden font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-primary md:block">
             Voir tout →
@@ -156,8 +159,8 @@ function Home() {
 
       {/* SHOWCASE */}
       <section className="border-t border-border bg-muted/30 py-16">
-        <div className="mx-auto max-w-[1400px] px-4">
-          <div className="mb-8 flex items-end justify-between">
+        <div className="mx-auto max-w-[1400px] px-3 sm:px-4">
+          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="font-mono text-[11px] uppercase tracking-widest text-primary">// Vitrine</div>
               <h2 className="mt-1 text-3xl font-bold">Dernière génération</h2>
@@ -182,7 +185,7 @@ function Home() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
               {showcase.map((p) => (
                 <ProductCard key={p.id} product={p} onOpen={openProduct} compact />
               ))}

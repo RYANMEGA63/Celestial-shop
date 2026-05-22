@@ -618,18 +618,18 @@ export function RoboticAssembly({ onAssemblyComplete }: RoboticAssemblyProps) {
         </svg>
 
         {/* Floating Futuristic HUD Overlay */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
-          <div className="flex flex-col gap-1 rounded-lg border border-primary/20 bg-background/80 backdrop-blur-md px-3 py-2 font-mono text-[10px] tracking-widest text-muted-foreground shadow-lg">
+        <div className="pointer-events-none absolute left-2 right-2 top-2 flex items-start justify-between gap-2 sm:left-4 sm:right-4 sm:top-4">
+          <div className="flex min-w-0 flex-col gap-1 rounded-lg border border-primary/20 bg-background/80 px-2 py-1.5 font-mono text-[8px] tracking-widest text-muted-foreground shadow-lg backdrop-blur-md sm:px-3 sm:py-2 sm:text-[10px]">
             <div className="flex items-center gap-1.5 text-primary">
               <Activity className="h-3.5 w-3.5 animate-pulse" />
-              <span>ROBOTIC_ASSEMBLY_SYS</span>
+              <span className="truncate">ROBOTIC_ASSEMBLY_SYS</span>
             </div>
-            <div className="text-[9px] opacity-75 mt-1 font-semibold text-foreground">
+            <div className="mt-1 truncate text-[8px] font-semibold text-foreground opacity-75 sm:text-[9px]">
               {currentStep}
             </div>
           </div>
 
-          <div className="flex flex-col items-end gap-1.5">
+          <div className="hidden flex-col items-end gap-1.5 sm:flex">
             <div className="rounded-lg border border-success/30 bg-success/10 backdrop-blur-md px-3 py-1 font-mono text-[10px] tracking-wider text-success font-semibold shadow-lg flex items-center gap-1">
               <span className="h-1.5 w-1.5 rounded-full bg-success animate-ping" />
               <span>ENG_STATUS: ACTIVE</span>
@@ -638,7 +638,7 @@ export function RoboticAssembly({ onAssemblyComplete }: RoboticAssemblyProps) {
         </div>
 
         {/* Steps Check indicator list on bottom-left */}
-        <div className="absolute bottom-4 left-4 flex flex-col gap-1.5 pointer-events-none">
+        <div className="pointer-events-none absolute bottom-2 left-2 flex flex-col gap-1 sm:bottom-4 sm:left-4 sm:gap-1.5">
           {[
             { id: 1, label: "INSTALLATION CPU" },
             { id: 2, label: "SYNCHRO CANAL RAM" },
@@ -648,7 +648,7 @@ export function RoboticAssembly({ onAssemblyComplete }: RoboticAssemblyProps) {
             return (
               <div
                 key={step.id}
-                className={`flex items-center gap-2 rounded-md border px-2.5 py-1 font-mono text-[9px] tracking-widest backdrop-blur-md transition-all duration-500 ${
+                className={`flex items-center gap-1.5 rounded-md border px-2 py-0.5 font-mono text-[7px] tracking-widest backdrop-blur-md transition-all duration-500 sm:gap-2 sm:px-2.5 sm:py-1 sm:text-[9px] ${
                   isCompleted
                     ? "border-success/30 bg-success/5 text-success shadow-[0_0_10px_rgba(16,185,129,0.1)]"
                     : "border-border/40 bg-background/50 text-muted-foreground/60"

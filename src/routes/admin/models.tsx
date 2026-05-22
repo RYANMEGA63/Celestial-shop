@@ -341,7 +341,7 @@ function AdminModels() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
             // Modèles PC
@@ -351,7 +351,7 @@ function AdminModels() {
             Créez des PCs pré-configurés avec des slots verrouillés ou personnalisables
           </p>
         </div>
-        <Button onClick={openCreate}>
+        <Button onClick={openCreate} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Nouveau modèle
         </Button>
@@ -509,7 +509,7 @@ function AdminModels() {
                     Informations générales
                   </div>
 
-                  <div className="grid gap-5 sm:grid-cols-[200px_1fr]">
+                  <div className="grid gap-5 md:grid-cols-[200px_1fr]">
                     {/* Image Column */}
                     <div className="space-y-3">
                       <Label>Photo du modèle</Label>
@@ -586,7 +586,7 @@ function AdminModels() {
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div className="space-y-1.5">
                           <Label htmlFor="model-fixed-price">
                             Prix fixe (DA)
@@ -716,7 +716,7 @@ function AdminModels() {
                       return (
                         <div
                           key={cat.id}
-                          className={`flex flex-col gap-3 rounded-lg border p-4 transition-all md:flex-row md:items-center md:gap-4 ${
+                          className={`flex flex-col gap-3 rounded-lg border p-3 transition-all sm:p-4 md:flex-row md:items-center md:gap-4 ${
                             slotDraft.is_active
                               ? "border-border bg-card/40 backdrop-blur-sm"
                               : "border-dashed border-border/40 bg-muted/5 opacity-60"
@@ -853,11 +853,11 @@ function AdminModels() {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between border-t border-border p-5">
-                <Button type="button" variant="ghost" onClick={closeSheet}>
+              <div className="flex flex-col-reverse gap-2 border-t border-border p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+                <Button type="button" variant="ghost" onClick={closeSheet} className="w-full sm:w-auto">
                   Annuler
                 </Button>
-                <Button type="submit" disabled={saveMutation.isPending || uploading}>
+                <Button type="submit" disabled={saveMutation.isPending || uploading} className="w-full sm:w-auto">
                   {saveMutation.isPending || uploading ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : null}

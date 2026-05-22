@@ -11,7 +11,6 @@ import {
   Cpu,
   Wrench,
   ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -67,10 +66,10 @@ function CartItemRow({ item }: { item: CartItem }) {
           : "max-h-[800px] opacity-100"
       }`}
     >
-      <div className="backdrop-blur-md bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 hover:shadow-[0_12px_45px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden transition-all duration-300">
-        <div className="flex gap-4 p-4">
+      <div className="backdrop-blur-md bg-card/65 border border-border/70 shadow-[0_8px_30px_rgba(0,0,0,0.18)] hover:-translate-y-0.5 hover:shadow-[0_12px_45px_rgba(0,0,0,0.26)] rounded-xl overflow-hidden transition-all duration-300">
+        <div className="flex flex-col gap-4 p-4 sm:flex-row">
           {/* Image */}
-          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-white/[0.08] bg-white/[0.01]">
+          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-border/70 bg-muted/35">
             {item.image_url ? (
               <img
                 src={item.image_url}
@@ -117,8 +116,8 @@ function CartItemRow({ item }: { item: CartItem }) {
           </div>
 
           {/* Price + Qty */}
-          <div className="flex flex-col items-end justify-between shrink-0">
-            <div className="text-right">
+          <div className="flex shrink-0 flex-row items-center justify-between gap-3 sm:flex-col sm:items-end">
+            <div className="text-left sm:text-right">
               <div className="font-mono text-sm font-bold text-foreground">
                 {(item.unit_price * item.quantity).toLocaleString("fr-DZ")} DA
               </div>
@@ -132,10 +131,10 @@ function CartItemRow({ item }: { item: CartItem }) {
             <div className="flex items-center gap-2 mt-2">
               {/* Qty controls — only for simple products */}
               {item.type === "product" && (
-                <div className="flex items-center rounded-lg border border-white/[0.08] bg-white/[0.01] overflow-hidden">
+                <div className="flex items-center rounded-lg border border-border/70 bg-muted/35 overflow-hidden">
                   <button
                     onClick={() => updateQty(item.cartId, item.quantity - 1)}
-                    className="flex h-7 w-7 items-center justify-center text-muted-foreground hover:bg-white/[0.05] hover:text-foreground transition-colors"
+                    className="flex h-7 w-7 items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
                   >
                     <Minus className="h-3 w-3" />
                   </button>
@@ -144,7 +143,7 @@ function CartItemRow({ item }: { item: CartItem }) {
                   </span>
                   <button
                     onClick={() => updateQty(item.cartId, item.quantity + 1)}
-                    className="flex h-7 w-7 items-center justify-center text-muted-foreground hover:bg-white/[0.05] hover:text-foreground transition-colors"
+                    className="flex h-7 w-7 items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -153,7 +152,7 @@ function CartItemRow({ item }: { item: CartItem }) {
 
               <button
                 onClick={handleDelete}
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/[0.08] text-muted-foreground hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 cursor-pointer"
+                className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/70 text-muted-foreground hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 cursor-pointer"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
@@ -163,7 +162,7 @@ function CartItemRow({ item }: { item: CartItem }) {
         {/* Component details */}
         {hasDetails && expanded && (
           <div className="px-4 pb-4 pt-0">
-            <div className="border-t border-white/[0.08] pt-4 space-y-2">
+            <div className="border-t border-border/60 pt-4 space-y-2">
               {item.specs.map((slot, i) => (
                 <div key={i} className="flex items-center justify-between gap-3 py-1">
                   <div className="flex items-center gap-2 min-w-0">
@@ -171,7 +170,7 @@ function CartItemRow({ item }: { item: CartItem }) {
                       <img
                         src={slot.image_url}
                         alt={slot.product}
-                        className="h-6 w-6 shrink-0 rounded object-cover border border-white/[0.05]"
+                        className="h-6 w-6 shrink-0 rounded object-cover border border-border/60"
                       />
                     )}
                     <div className="min-w-0">
@@ -205,8 +204,8 @@ function PanierPage() {
   if (items.length === 0) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-20 text-center">
-        <div className="backdrop-blur-md bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_30px_rgba(0,0,0,0.3)] rounded-2xl p-8 flex flex-col items-center gap-4">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/[0.05] bg-white/[0.01]">
+        <div className="backdrop-blur-md bg-card/65 border border-border/70 shadow-[0_8px_30px_rgba(0,0,0,0.18)] rounded-2xl p-8 flex flex-col items-center gap-4">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border/70 bg-muted/35">
             <ShoppingCart className="h-10 w-10 text-muted-foreground/40" />
           </div>
           <h1 className="text-2xl font-bold">Votre panier est vide</h1>
@@ -222,7 +221,7 @@ function PanierPage() {
             </Link>
             <Link
               to="/configurateur"
-              className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.01] px-5 py-2.5 text-sm font-semibold hover:border-primary/40 hover:bg-white/[0.03] transition-all duration-200"
+              className="flex items-center gap-2 rounded-lg border border-border/70 bg-muted/35 px-5 py-2.5 text-sm font-semibold hover:border-primary/40 hover:bg-muted/60 transition-all duration-200"
             >
               Configurateur PC
             </Link>
@@ -235,7 +234,7 @@ function PanierPage() {
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-8">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="font-mono text-[11px] uppercase tracking-widest text-primary">
             // Panier
@@ -249,7 +248,7 @@ function PanierPage() {
         </div>
         <button
           onClick={clear}
-          className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.01] px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 cursor-pointer"
+          className="flex items-center gap-1.5 rounded-lg border border-border/70 bg-muted/35 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 cursor-pointer"
         >
           <Trash2 className="h-3 w-3" />
           Vider le panier
@@ -266,7 +265,7 @@ function PanierPage() {
           <div className="flex gap-3 pt-2">
             <Link
               to="/boutique"
-              className="rounded-lg border border-white/[0.08] bg-white/[0.01] px-4 py-2 text-sm text-muted-foreground hover:border-primary/40 hover:text-foreground hover:bg-white/[0.03] transition-all duration-200"
+              className="rounded-lg border border-border/70 bg-muted/35 px-4 py-2 text-sm text-muted-foreground hover:border-primary/40 hover:text-foreground hover:bg-muted/60 transition-all duration-200"
             >
               ← Continuer mes achats
             </Link>
@@ -274,16 +273,16 @@ function PanierPage() {
         </div>
 
         {/* Summary */}
-        <div className="sticky top-20 h-fit">
-          <div className="backdrop-blur-md bg-white/[0.02] border border-white/[0.05] shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_45px_rgba(0,0,0,0.5)] transition-all duration-300 rounded-xl p-5 space-y-4">
+        <div className="h-fit lg:sticky lg:top-20">
+          <div className="backdrop-blur-md bg-card/65 border border-border/70 shadow-[0_8px_30px_rgba(0,0,0,0.18)] hover:shadow-[0_12px_45px_rgba(0,0,0,0.26)] transition-all duration-300 rounded-xl p-5 space-y-4">
             <div className="font-mono text-[10px] uppercase tracking-widest text-primary mb-3">
               // Récapitulatif
             </div>
 
             <div className="space-y-2">
               {items.map((item) => (
-                <div key={item.cartId} className="flex justify-between text-sm">
-                  <span className="text-muted-foreground truncate max-w-[160px]">
+                <div key={item.cartId} className="flex justify-between gap-3 text-sm">
+                  <span className="min-w-0 truncate text-muted-foreground">
                     {item.name}{" "}
                     {item.quantity > 1 && (
                       <span className="text-xs">×{item.quantity}</span>
@@ -296,7 +295,7 @@ function PanierPage() {
               ))}
             </div>
 
-            <div className="border-t border-white/[0.05] pt-3">
+            <div className="border-t border-border/60 pt-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Sous-total</span>
                 <span className="font-mono font-semibold">

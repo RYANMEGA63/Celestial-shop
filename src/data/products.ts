@@ -1,6 +1,6 @@
 export type Category = "cpu" | "motherboard" | "gpu" | "ram" | "storage" | "psu" | "case" | "cooler" | "peripheral";
 
-export type Universe = "gaming" | "pro" | "ai";
+export type Universe = "gaming" | "pro" | "creation";
 
 export interface Product {
   id: string;
@@ -78,7 +78,7 @@ export const products: Product[] = [
     price: 619,
     image: ph("Core i9-14900K"),
     tagline: "24 cœurs · 6.0 GHz · Workstation",
-    universes: ["pro", "ai", "gaming"],
+    universes: ["pro", "creation", "gaming"],
     socket: "LGA1700",
     tdp: 253,
     specs: {
@@ -126,7 +126,7 @@ export const products: Product[] = [
     price: 289,
     image: ph("Z790 AORUS", "10b981"),
     tagline: "ATX · LGA1700 · DDR5 · 16+1+2 phases",
-    universes: ["gaming", "pro", "ai"],
+    universes: ["gaming", "pro", "creation"],
     socket: "LGA1700",
     chipset: "Z790",
     ramType: "DDR5",
@@ -152,7 +152,7 @@ export const products: Product[] = [
     price: 679,
     image: ph("RTX 4070 SUPER"),
     tagline: "12 GB GDDR6X · DLSS 3 · 1440p king",
-    universes: ["gaming", "ai"],
+    universes: ["gaming", "creation"],
     tdp: 220,
     specs: {
       "Architecture": "Ada Lovelace",
@@ -174,8 +174,8 @@ export const products: Product[] = [
     category: "gpu",
     price: 1899,
     image: ph("RTX 4090"),
-    tagline: "24 GB · 16384 CUDA · 4K ultra & IA",
-    universes: ["gaming", "ai", "pro"],
+    tagline: "24 GB · 16384 CUDA · 4K ultra",
+    universes: ["gaming", "creation", "pro"],
     tdp: 450,
     specs: {
       "Architecture": "Ada Lovelace",
@@ -238,7 +238,7 @@ export const products: Product[] = [
     price: 219,
     image: ph("Fury Beast 64GB", "10b981"),
     tagline: "2× 32 GB · workstation & rendu",
-    universes: ["pro", "ai"],
+    universes: ["pro", "creation"],
     ramType: "DDR5",
     specs: {
       "Capacité": "64 GB (2× 32)",
@@ -257,7 +257,7 @@ export const products: Product[] = [
     price: 179,
     image: ph("SN850X 2TB"),
     tagline: "NVMe PCIe 4.0 · 7300 MB/s",
-    universes: ["gaming", "pro", "ai"],
+    universes: ["gaming", "pro", "creation"],
     specs: {
       "Capacité": "2 TB",
       "Format": "M.2 2280",
@@ -277,7 +277,7 @@ export const products: Product[] = [
     price: 159,
     image: ph("RM850x 850W"),
     tagline: "80+ Gold · Modulaire · ATX 3.1",
-    universes: ["gaming", "pro", "ai"],
+    universes: ["gaming", "pro", "creation"],
     specs: {
       "Puissance": "850 W",
       "Certification": "80 PLUS Gold",
@@ -317,7 +317,7 @@ export const products: Product[] = [
     price: 119,
     image: ph("Liquid Freezer III"),
     tagline: "AIO 360mm · VRM fan · AM5/LGA1700",
-    universes: ["gaming", "pro", "ai"],
+    universes: ["gaming", "pro", "creation"],
     tdp: 350,
     specs: {
       "Type": "Watercooling AIO",

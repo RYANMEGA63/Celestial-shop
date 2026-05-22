@@ -102,15 +102,15 @@ const getCategoryIcon = (slug: string) => {
 const getBentoSpan = (slug: string) => {
   switch (slug) {
     case "case":
-      return "col-span-2 row-span-2 md:col-span-2 md:row-span-2";
+      return "sm:col-span-2 sm:row-span-2";
     case "cpu":
-      return "col-span-2 row-span-1 md:col-span-2 md:row-span-1";
+      return "sm:col-span-2";
     case "gpu":
-      return "col-span-2 row-span-1 md:col-span-2 md:row-span-1";
+      return "sm:col-span-2";
     case "motherboard":
-      return "col-span-2 row-span-1 md:col-span-2 md:row-span-1";
+      return "sm:col-span-2";
     default:
-      return "col-span-1 row-span-1";
+      return "";
   }
 };
 
@@ -340,7 +340,7 @@ function Builder() {
   // ═══════════════════════════════════════════════════════════════════════════
 
   return (
-    <main className="mx-auto max-w-[1400px] px-4 py-8">
+    <main className="mx-auto max-w-[1400px] px-3 py-6 sm:px-4 sm:py-8">
       {/* HUD Styles Injection */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes neon-glow-pulse {
@@ -381,10 +381,10 @@ function Builder() {
         </div>
 
         {/* Mode switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-border/40 bg-card/30 backdrop-blur-md p-1 self-start md:self-auto">
+        <div className="flex w-full items-center gap-1 overflow-x-auto rounded-xl border border-border/40 bg-card/30 p-1 backdrop-blur-md md:w-auto md:self-auto">
           <button
             onClick={() => setViewMode("libre")}
-            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all duration-300 ${
+            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all duration-300 ${
               viewMode === "libre"
                 ? "bg-sky-500/10 text-[#38bdf8] ring-1 ring-sky-500/30"
                 : "text-muted-foreground hover:text-foreground"
@@ -395,7 +395,7 @@ function Builder() {
           </button>
           <button
             onClick={() => setViewMode("modeles")}
-            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all duration-300 ${
+            className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider transition-all duration-300 ${
               viewMode === "modeles"
                 ? "bg-sky-500/10 text-[#38bdf8] ring-1 ring-sky-500/30"
                 : "text-muted-foreground hover:text-foreground"
@@ -414,7 +414,7 @@ function Builder() {
 
       {/* Model banner */}
       {selectedModel && (
-        <div className="mb-6 flex items-center justify-between rounded-xl border border-sky-500/20 bg-sky-500/5 px-4 py-3 backdrop-blur-md">
+        <div className="mb-6 flex flex-col gap-3 rounded-xl border border-sky-500/20 bg-sky-500/5 px-4 py-3 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <Cpu className="h-5 w-5 text-[#38bdf8] glow-cyan" />
             <div>
@@ -579,7 +579,7 @@ function Builder() {
           <div className="lg:col-span-7 xl:col-span-8 space-y-8">
             
             {/* Bento Grid slots */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 grid-flow-dense">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:grid-flow-dense">
               {visibleCategories.map((cat, i) => {
                 const filled = !!build[cat.id];
                 const isActive = activeSlot === cat.id;
@@ -652,7 +652,7 @@ function Builder() {
 
             {/* Product selection selector for active category */}
             {options.length > 0 && !lockedSlots.has(activeSlot) && (
-              <div className="rounded-xl border border-border/40 bg-card/25 backdrop-blur-md p-6">
+              <div className="rounded-xl border border-border/40 bg-card/25 p-4 backdrop-blur-md sm:p-6">
                 <div className="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-border/30 pb-4 gap-2">
                   <div>
                     <h2 className="text-base font-bold tracking-wide text-foreground flex items-center gap-2">

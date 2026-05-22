@@ -15,8 +15,8 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-6 px-4">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="mx-auto flex min-h-14 max-w-[1400px] flex-wrap items-center gap-2 px-3 py-2 sm:flex-nowrap sm:gap-6 sm:px-4">
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/15 text-primary ring-1 ring-primary/30">
             <Cpu className="h-4 w-4" />
           </div>
@@ -25,7 +25,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="order-3 -mx-3 flex w-[calc(100%+1.5rem)] items-center gap-1 overflow-x-auto px-3 pb-1 sm:order-none sm:mx-0 sm:w-auto sm:overflow-visible sm:px-0 sm:pb-0">
           {links.map((l) => {
             const active = l.to === "/" ? path === "/" : path.startsWith(l.to);
             const Icon = l.icon;
@@ -33,7 +33,7 @@ export function SiteHeader() {
               <Link
                 key={l.to}
                 to={l.to}
-                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                className={`flex shrink-0 items-center gap-2 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors sm:px-3 sm:text-sm ${
                   active
                     ? "bg-primary/10 text-primary ring-1 ring-primary/30"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -46,10 +46,10 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
-          <div className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-muted-foreground sm:flex">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+          <div className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-muted-foreground lg:flex">
             <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-            stock live · expédition 24h
+            stock live · expédition 48h-7j
           </div>
 
           {/* Theme toggle */}
@@ -58,7 +58,7 @@ export function SiteHeader() {
           {/* Cart icon */}
           <Link
             to="/panier"
-            className={`relative flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`relative flex items-center gap-2 rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors sm:px-3 ${
               path === "/panier"
                 ? "bg-primary/10 text-primary ring-1 ring-primary/30"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -77,3 +77,4 @@ export function SiteHeader() {
     </header>
   );
 }
+
