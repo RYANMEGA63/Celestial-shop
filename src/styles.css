@@ -1,6 +1,6 @@
-@import "tailwindcss" source(none);
-@source "../src";
+﻿@import "tailwindcss" source(none);
 @import "tw-animate-css";
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -246,3 +246,5 @@
     @apply bg-card/40 backdrop-blur-md border border-card-border shadow-[0_0_15px_rgba(56,189,248,0.05)];
   }
 }
+
+
