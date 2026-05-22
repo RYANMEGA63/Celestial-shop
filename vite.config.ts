@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { nitro } from "nitro/vite";
 
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
 export default defineConfig({
@@ -12,9 +13,11 @@ export default defineConfig({
     tanstackStart({
       server: { entry: "server" },
     }),
+    nitro(),
     react(),
   ],
   optimizeDeps: {
     exclude: ["animejs"],
   },
 });
+
