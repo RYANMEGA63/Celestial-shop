@@ -5,9 +5,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import type { Product, Category } from "@/lib/types";
-import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import type { Category, Product } from "@/lib/types";
+import { ShoppingCart } from "lucide-react";
 
 interface Props {
   product: Product | null;
@@ -29,24 +29,25 @@ export function ProductDetailSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-xl">
+      <SheetContent
+        side="right"
+        className="w-[88vw] overflow-y-auto border-l p-0 sm:w-[420px] sm:max-w-[420px] lg:w-[480px] lg:max-w-[480px]"
+      >
         {product && (
-          <div className="flex h-full flex-col">
-            <SheetHeader className="border-b border-border p-4 sm:p-5">
+          <div className="flex h-full flex-col bg-background">
+            <SheetHeader className="border-b border-border px-4 pb-4 pt-6 sm:px-5">
               <div className="font-mono text-[10px] uppercase tracking-widest text-primary">
                 {categoryLabel} · {product.brand}
               </div>
-              <SheetTitle className="text-xl sm:text-2xl">{product.name}</SheetTitle>
-              <SheetDescription>{product.tagline}</SheetDescription>
+              <SheetTitle className="pr-8 text-lg sm:text-xl">{product.name}</SheetTitle>
+              <SheetDescription className="text-sm leading-relaxed">
+                {product.tagline}
+              </SheetDescription>
             </SheetHeader>
 
-            <div className="aspect-[16/9] w-full overflow-hidden bg-muted">
+            <div className="aspect-[5/4] w-full overflow-hidden border-b border-border bg-muted">
               {product.image_url ? (
-                <img
-                  src={product.image_url}
-                  alt={product.name}
-                  className="h-full w-full object-cover"
-                />
+                <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-muted font-mono text-xs text-muted-foreground">
                   Aucune image
@@ -54,18 +55,18 @@ export function ProductDetailSheet({
               )}
             </div>
 
-            <div className="flex flex-col gap-3 border-b border-border bg-muted/40 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-              <div>
+            <div className="border-b border-border bg-muted/30 px-4 py-4 sm:px-5">
+              <div className="mb-3">
                 <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Prix TTC
                 </div>
-                <div className="font-mono text-xl font-bold text-success sm:text-2xl">
+                <div className="font-mono text-2xl font-bold text-success">
                   {Number(product.price).toLocaleString("fr-FR")} DA
                 </div>
               </div>
               <Button
                 onClick={() => onAdd?.(product)}
-                className="w-full bg-success text-success-foreground hover:bg-success/90 sm:w-auto"
+                className="w-full bg-success text-success-foreground hover:bg-success/90"
                 size="lg"
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
@@ -73,8 +74,8 @@ export function ProductDetailSheet({
               </Button>
             </div>
 
-            <div className="p-4 sm:p-5">
-              <div className="mb-2 flex items-center justify-between">
+            <div className="flex-1 p-4 sm:p-5">
+              <div className="mb-3 flex items-center justify-between">
                 <h3 className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                   Fiche technique
                 </h3>
@@ -84,22 +85,17 @@ export function ProductDetailSheet({
               </div>
 
               {Object.keys(product.specs ?? {}).length === 0 ? (
-                <p className="font-mono text-xs text-muted-foreground">
-                  Aucun attribut renseigné.
-                </p>
+                <p className="font-mono text-xs text-muted-foreground">Aucun attribut renseigne.</p>
               ) : (
-                <div className="overflow-x-auto rounded-md border border-border">
-                  <table className="spec-table min-w-[420px] w-full">
+                <div className="overflow-hidden rounded-xl border border-border">
+                  <table className="spec-table w-full">
                     <tbody>
                       {Object.entries(product.specs ?? {}).map(([k, v], i) => (
-                        <tr
-                          key={k}
-                          className={i % 2 === 0 ? "bg-background" : "bg-muted/40"}
-                        >
-                          <td className="w-[45%] border-b border-border px-3 py-1.5 text-muted-foreground">
+                        <tr key={k} className={i % 2 === 0 ? "bg-background" : "bg-muted/40"}>
+                          <td className="w-[42%] border-b border-border px-3 py-2 align-top text-muted-foreground">
                             {k}
                           </td>
-                          <td className="border-b border-border px-3 py-1.5 font-semibold text-foreground">
+                          <td className="border-b border-border px-3 py-2 font-semibold text-foreground">
                             {v}
                           </td>
                         </tr>

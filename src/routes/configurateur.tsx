@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import type { Product, Category, PcModel } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ProductDetailSheet } from "@/components/ProductDetailSheet";
 import {
   Check,
@@ -22,6 +23,7 @@ import {
   Snowflake,
   Server,
   Box,
+  Search,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCartContext } from "@/lib/cartContext";
@@ -30,7 +32,7 @@ import type { PcModelSlot } from "@/lib/types";
 export const Route = createFileRoute("/configurateur")({
   head: () => ({
     meta: [
-      { title: "Configurateur PC sur mesure — Celestial Shop" },
+      { title: "Configurateur PC sur mesure - Celestial Shop" },
       {
         name: "description",
         content:
@@ -41,12 +43,12 @@ export const Route = createFileRoute("/configurateur")({
   component: Builder,
 });
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------
 
 type Build = Record<string, Product>;
 type ViewMode = "libre" | "modeles";
 
-// ── Compatibility ─────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------
 
 function compatible(
   product: Product,
@@ -59,17 +61,17 @@ function compatible(
   const ram = Object.values(build).find((p) => getCatSlug(p) === "ram");
 
   if (categorySlug === "motherboard" && cpu?.socket && product.socket && cpu.socket !== product.socket)
-    return { ok: false, reason: `Socket ${product.socket} ≠ CPU ${cpu.socket}` };
+    return { ok: false, reason: `Socket ${product.socket} != CPU ${cpu.socket}` };
   if (categorySlug === "cpu" && mb?.socket && product.socket && mb.socket !== product.socket)
     return { ok: false, reason: `Socket incompatible avec ${mb.name}` };
   if (categorySlug === "ram" && mb?.ram_type && product.ram_type && mb.ram_type !== product.ram_type)
-    return { ok: false, reason: `${product.ram_type} ≠ ${mb.ram_type}` };
+    return { ok: false, reason: `${product.ram_type} != ${mb.ram_type}` };
   if (categorySlug === "motherboard" && ram?.ram_type && product.ram_type && ram.ram_type !== product.ram_type)
     return { ok: false, reason: `RAM ${ram.ram_type} requise` };
   return { ok: true };
 }
 
-// ── Helper Category Icons Mapping ─────────────────────────────────────────────
+// ----------------------------------------------------------------
 
 const getCategoryIcon = (slug: string) => {
   switch (slug) {
@@ -97,7 +99,7 @@ const getCategoryIcon = (slug: string) => {
   }
 };
 
-// ── Helper Bento Grid Span Mapping ─────────────────────────────────────────────
+// ----------------------------------------------------------------
 
 const getBentoSpan = (slug: string) => {
   switch (slug) {
@@ -114,7 +116,7 @@ const getBentoSpan = (slug: string) => {
   }
 };
 
-// ── Builder ───────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------
 
 function Builder() {
   const { addModel, addFreeBuild } = useCartContext();
@@ -124,12 +126,13 @@ function Builder() {
   const [build, setBuild] = useState<Build>({});
   const [detail, setDetail] = useState<Product | null>(null);
   const [open, setOpen] = useState(false);
+  const [modelSearch, setModelSearch] = useState("");
 
   // Model mode state
   const [selectedModel, setSelectedModel] = useState<PcModel | null>(null);
   const [lockedSlots, setLockedSlots] = useState<Set<string>>(new Set());
 
-  // ── Data ────────────────────────────────────────────────────────────────────
+  // ----------------------------------------------------------------
 
   const { data: categories = [], isLoading: loadingCats } = useQuery<Category[]>({
     queryKey: ["categories"],
@@ -194,7 +197,7 @@ function Builder() {
 
   const defaultAssemblyCost = Number(dbAssemblyCost ?? "79");
 
-  // ── Effects ─────────────────────────────────────────────────────────────────
+  // ----------------------------------------------------------------
 
   useEffect(() => {
     if (categories.length > 0 && !activeSlot) {
@@ -202,9 +205,19 @@ function Builder() {
     }
   }, [categories, activeSlot]);
 
-  // ── Derived ─────────────────────────────────────────────────────────────────
+  // ----------------------------------------------------------------
 
   const isLoading = loadingCats || loadingProducts || loadingModels;
+  const filteredModels = useMemo(() => {
+    if (!modelSearch.trim()) return models;
+
+    const query = modelSearch.toLowerCase();
+    return models.filter((model) => {
+      const matchName = model.name.toLowerCase().includes(query);
+      const matchDescription = (model.description ?? "").toLowerCase().includes(query);
+      return matchName || matchDescription;
+    });
+  }, [models, modelSearch]);
 
   // Filter categories depending on selected model
   const visibleCategories = useMemo(() => {
@@ -249,7 +262,7 @@ function Builder() {
     : totalPrice + effectiveAssemblyCost;
   const filledCount = Object.keys(build).length;
 
-  // ── Handlers ─────────────────────────────────────────────────────────────────
+  // ----------------------------------------------------------------
 
   const pickPart = (p: Product) => {
     const targetSlotId = p.category_id;
@@ -333,11 +346,11 @@ function Builder() {
     navigate({ to: "/panier" });
   };
 
-  // ── UI helpers ────────────────────────────────────────────────────────────
+  // ----------------------------------------------------------------
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ----------------------------------------------------------------
   // RENDER
-  // ═══════════════════════════════════════════════════════════════════════════
+  // ----------------------------------------------------------------
 
   return (
     <main className="mx-auto max-w-[1400px] px-3 py-6 sm:px-4 sm:py-8">
@@ -445,14 +458,29 @@ function Builder() {
         <div className="flex flex-col items-center justify-center py-32 text-muted-foreground">
           <Loader2 className="h-8 w-8 animate-spin text-sky-500" />
           <p className="mt-3 font-mono text-[10px] uppercase tracking-widest">
-            Initialisation du système…
+            Initialisation du système...
           </p>
         </div>
       ) : viewMode === "modeles" ? (
-        // ═══════════════════════════════════════════════════════════════════
+        // ----------------------------------------------------------------
         // MODE MODÈLES
-        // ═══════════════════════════════════════════════════════════════════
+        // ----------------------------------------------------------------
         <div>
+          <div className="mb-6 rounded-xl border border-border/30 bg-card/30 p-4 backdrop-blur-md">
+            <div className="mb-2 font-mono text-[10px] uppercase tracking-widest text-sky-400">
+              Recherche modele
+            </div>
+            <div className="relative w-full sm:max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={modelSearch}
+                onChange={(e) => setModelSearch(e.target.value)}
+                className="h-10 border-border/40 bg-background/70 pl-9"
+                placeholder="Chercher un nom ou un mot de la description"
+              />
+            </div>
+          </div>
+
           {models.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/40 py-24 text-center">
               <Cpu className="mb-3 h-8 w-8 text-muted-foreground/40" />
@@ -460,9 +488,16 @@ function Builder() {
                 Aucun modèle disponible pour l'instant.
               </p>
             </div>
+          ) : filteredModels.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/40 py-24 text-center">
+              <Search className="mb-3 h-8 w-8 text-muted-foreground/40" />
+              <p className="font-mono text-xs text-muted-foreground">
+                Aucun modele ne correspond a votre recherche.
+              </p>
+            </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {models.map((model) => {
+            <div className="grid grid-cols-2 gap-4 lg:gap-6 xl:grid-cols-3">
+              {filteredModels.map((model) => {
                 const slots = model.slots ?? [];
                 const lockedCount = slots.filter((s) => !s.is_customizable).length;
                 const customizableCount = slots.filter((s) => s.is_customizable).length;
@@ -570,9 +605,9 @@ function Builder() {
           )}
         </div>
       ) : (
-        // ═══════════════════════════════════════════════════════════════════
-        // MODE BUILDER LIBRE — LAYOUT ASYMMÉTRIQUE
-        // ═══════════════════════════════════════════════════════════════════
+        // ----------------------------------------------------------------
+        // MODE BUILDER LIBRE - LAYOUT ASYMMÉTRIQUE
+        // ----------------------------------------------------------------
         <div className="grid gap-8 lg:grid-cols-12 items-start">
           
           {/* COLUMN LEFT: Bento Grid & Product Options Selector (col-span-8) */}
@@ -943,3 +978,5 @@ function Builder() {
     </main>
   );
 }
+
+

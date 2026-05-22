@@ -249,7 +249,7 @@ function AdminProducts() {
       qc.invalidateQueries({ queryKey: ["admin-products-count"] });
       setShowForm(false);
       toast.success(
-        editingProduct ? "Produit mis Ã  jour !" : "Produit crÃ©Ã© !"
+        editingProduct ? "Produit mis à jour !" : "Produit créé !"
       );
     },
     onError: (e: Error) => {
@@ -266,7 +266,7 @@ function AdminProducts() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["products"] });
       qc.invalidateQueries({ queryKey: ["admin-products-count"] });
-      toast.success("Produit supprimÃ©");
+      toast.success("Produit supprimé");
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -339,7 +339,7 @@ function AdminProducts() {
               />
               {imageFile && (
                 <p className="mt-1.5 font-mono text-[10px] text-primary">
-                  âœ“ {imageFile.name}
+                  ✓ {imageFile.name}
                 </p>
               )}
             </div>
@@ -366,7 +366,7 @@ function AdminProducts() {
 
               {/* Row 2 */}
               <div className="grid gap-3 sm:grid-cols-2">
-                <Field label="CatÃ©gorie">
+                <Field label="Catégorie">
                   <div className="relative">
                     <select
                       value={form.category_id}
@@ -407,7 +407,7 @@ function AdminProducts() {
               {/* Compatibility */}
               <details className="group rounded-md border border-border">
                 <summary className="flex cursor-pointer items-center justify-between px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground">
-                  CompatibilitÃ© (optionnel)
+                  Compatibilité (optionnel)
                   <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
                 </summary>
                 <div className="grid gap-3 border-t border-border p-3 sm:grid-cols-3">
@@ -432,7 +432,7 @@ function AdminProducts() {
                       className="h-8 text-sm"
                     />
                   </Field>
-                  <Field label="Format (ATX, ITXâ€¦)">
+                  <Field label="Format (ATX, ITX...)">
                     <Input
                       value={form.form_factor}
                       onChange={(e) => setField("form_factor", e.target.value)}
@@ -454,7 +454,7 @@ function AdminProducts() {
               {Object.keys(categorySpecs).length > 0 && (
                 <div className="space-y-3 rounded-lg border border-border bg-muted/20 p-4">
                   <label className="block font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                    // Fiche technique (Attributs de la catÃ©gorie)
+                    // Fiche technique (Attributs de la catégorie)
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {Object.entries(categorySpecs).map(([key, value]) => (
@@ -482,7 +482,7 @@ function AdminProducts() {
               <div>
                 <div className="mb-2 flex items-center justify-between">
                   <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    Attributs spÃ©ciaux / additionnels
+                    Attributs spéciaux / additionnels
                   </label>
                   <button
                     onClick={() =>
@@ -548,12 +548,12 @@ function AdminProducts() {
               }
             >
               {uploading
-                ? "Upload photoâ€¦"
+                ? "Upload photo..."
                 : saveMutation.isPending
-                ? "Enregistrementâ€¦"
+                ? "Enregistrement..."
                 : editingProduct
-                ? "Mettre Ã  jour"
-                : "CrÃ©er le produit"}
+                ? "Mettre à jour"
+                : "Créer le produit"}
             </Button>
           </div>
         </div>
@@ -563,7 +563,7 @@ function AdminProducts() {
       <div className="rounded-lg border border-border overflow-hidden bg-card">
         {isLoading ? (
           <div className="py-12 text-center font-mono text-xs text-muted-foreground">
-            Chargementâ€¦
+            Chargement...
           </div>
         ) : products.length === 0 ? (
           <div className="py-12 text-center font-mono text-xs text-muted-foreground">
@@ -579,7 +579,7 @@ function AdminProducts() {
                   Produit
                 </th>
                 <th className="px-4 py-2.5 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  CatÃ©gorie
+                  Catégorie
                 </th>
                 <th className="px-4 py-2.5 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Prix
@@ -616,7 +616,7 @@ function AdminProducts() {
                   </td>
                   <td className="px-4 py-2.5">
                     <span className="rounded-md border border-border bg-muted/40 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
-                      {(p.category as Category)?.label ?? "â€”"}
+                      {(p.category as Category)?.label ?? "-"}
                     </span>
                   </td>
                   <td className="px-4 py-2.5 text-right font-mono font-semibold text-success">
@@ -668,5 +668,6 @@ function Field({
     </div>
   );
 }
+
 
 

@@ -181,6 +181,12 @@
 @layer base {
   * {
     border-color: var(--color-border);
+    animation: none !important;
+    transition-duration: 0s !important;
+    transition-property: none !important;
+  }
+  html {
+    scroll-behavior: auto;
   }
   body {
     background-color: var(--color-background);
