@@ -1,0 +1,248 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-border: var(--card-border);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Custom Transitions & Animations at 60fps */
+  --animate-fade-in: fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-in: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-neon: pulse-neon 3s infinite ease-in-out;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-in {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes pulse-neon {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(56, 189, 248, 0.05), 0 0 10px rgba(56, 189, 248, 0.02);
+      border-color: var(--card-border);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.15), 0 0 25px rgba(56, 189, 248, 0.08);
+      border-color: var(--primary);
+    }
+  }
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Celestial Shop Premium Light Theme (HSL) */
+  --background: hsl(220 33% 98%);
+  --foreground: hsl(240 22% 12%);
+
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(240 22% 12%);
+
+  --card-border: hsl(220 25% 88%);
+
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(240 22% 12%);
+
+  --primary: hsl(198 95% 56%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(220 20% 94%);
+  --secondary-foreground: hsl(240 22% 14%);
+
+  --muted: hsl(220 20% 95%);
+  --muted-foreground: hsl(235 10% 42%);
+
+  --accent: hsl(220 20% 93%);
+  --accent-foreground: hsl(240 22% 14%);
+
+  --success: hsl(160 70% 38%);
+  --success-foreground: hsl(0 0% 100%);
+
+  --warning: hsl(38 92% 46%);
+  --warning-foreground: hsl(0 0% 100%);
+
+  --info: hsl(200 86% 45%);
+  --info-foreground: hsl(0 0% 100%);
+
+  --destructive: hsl(0 74% 52%);
+  --destructive-foreground: hsl(0 0% 100%);
+
+  --border: hsl(220 25% 88%);
+  --input: hsl(220 25% 88%);
+  --ring: hsl(198 95% 56%);
+
+  --sidebar: hsl(0 0% 100%);
+  --sidebar-foreground: hsl(240 22% 12%);
+  --sidebar-primary: hsl(198 95% 56%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(220 20% 94%);
+  --sidebar-accent-foreground: hsl(240 22% 14%);
+  --sidebar-border: hsl(220 25% 88%);
+  --sidebar-ring: hsl(198 95% 56%);
+
+  --grid-line: rgba(10, 18, 38, 0.06);
+}
+
+.dark {
+  --background: hsl(240 25% 4%);
+  --foreground: hsl(0 0% 98%);
+
+  --card: hsl(240 20% 6%);
+  --card-foreground: hsl(0 0% 98%);
+  
+  --card-border: hsl(240 15% 12%);
+  
+  --popover: hsl(240 20% 6%);
+  --popover-foreground: hsl(0 0% 98%);
+
+  --primary: hsl(198 95% 64%);
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(240 15% 10%);
+  --secondary-foreground: hsl(0 0% 98%);
+  
+  --muted: hsl(240 15% 10%);
+  --muted-foreground: hsl(240 10% 65%);
+  
+  --accent: hsl(240 15% 12%);
+  --accent-foreground: hsl(0 0% 98%);
+
+  --success: hsl(160 84% 45%);
+  --success-foreground: hsl(240 25% 4%);
+
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(240 25% 4%);
+
+  --info: hsl(200 95% 55%);
+  --info-foreground: hsl(240 25% 4%);
+
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+
+  --border: hsl(240 15% 12%);
+  --input: hsl(240 15% 12%);
+  --ring: hsl(198 95% 64%);
+
+  --sidebar: hsl(240 25% 4%);
+  --sidebar-foreground: hsl(0 0% 98%);
+  --sidebar-primary: hsl(198 95% 64%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 15% 10%);
+  --sidebar-accent-foreground: hsl(0 0% 98%);
+  --sidebar-border: hsl(240 15% 12%);
+  --sidebar-ring: hsl(198 95% 64%);
+
+  --grid-line: rgba(255, 255, 255, 0.015);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .font-mono, code, kbd {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer utilities {
+  .text-success { color: var(--color-success); }
+  .bg-success { background-color: var(--color-success); }
+  .bg-success\/10 { background-color: color-mix(in oklab, var(--color-success) 10%, transparent); }
+  .border-success { border-color: var(--color-success); }
+  .ring-success { --tw-ring-color: var(--color-success); }
+
+  .text-warning { color: var(--color-warning); }
+  .bg-warning { background-color: var(--color-warning); }
+  .bg-warning\/10 { background-color: color-mix(in oklab, var(--color-warning) 10%, transparent); }
+  .bg-warning\/15 { background-color: color-mix(in oklab, var(--color-warning) 15%, transparent); }
+  .border-warning { border-color: var(--color-warning); }
+  .ring-warning { --tw-ring-color: var(--color-warning); }
+  .ring-warning\/20 { --tw-ring-color: color-mix(in oklab, var(--color-warning) 20%, transparent); }
+  .ring-warning\/30 { --tw-ring-color: color-mix(in oklab, var(--color-warning) 30%, transparent); }
+
+  .text-info { color: var(--color-info); }
+  .bg-info { background-color: var(--color-info); }
+  .bg-info\/10 { background-color: color-mix(in oklab, var(--color-info) 10%, transparent); }
+  .bg-info\/15 { background-color: color-mix(in oklab, var(--color-info) 15%, transparent); }
+  .border-info { border-color: var(--color-info); }
+  .ring-info { --tw-ring-color: var(--color-info); }
+  .ring-info\/20 { --tw-ring-color: color-mix(in oklab, var(--color-info) 20%, transparent); }
+  .ring-info\/30 { --tw-ring-color: color-mix(in oklab, var(--color-info) 30%, transparent); }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .spec-table {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  /* Cyber Grid & Glassmorphism Premium Utilities */
+  .cyber-grid {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .glass-premium {
+    @apply bg-card/40 backdrop-blur-md border border-card-border shadow-[0_0_15px_rgba(56,189,248,0.05)];
+  }
+}

@@ -1,0 +1,76 @@
+-- Migration 006: Wilayas d'Algérie avec coûts de livraison
+CREATE TABLE IF NOT EXISTS wilayas (
+  id            serial PRIMARY KEY,
+  code          smallint UNIQUE NOT NULL,
+  name          text NOT NULL,
+  delivery_cost integer NOT NULL DEFAULT 500,
+  is_active     boolean NOT NULL DEFAULT true,
+  created_at    timestamptz NOT NULL DEFAULT now()
+);
+
+-- RLS
+ALTER TABLE wilayas ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "wilayas_public_read" ON wilayas FOR SELECT USING (true);
+CREATE POLICY "wilayas_admin_write" ON wilayas FOR ALL USING (auth.role() = 'authenticated');
+
+-- Pré-remplissage des 58 wilayas
+INSERT INTO wilayas (code, name, delivery_cost) VALUES
+(1,  'Adrar', 800),
+(2,  'Chlef', 500),
+(3,  'Laghouat', 700),
+(4,  'Oum El Bouaghi', 600),
+(5,  'Batna', 600),
+(6,  'Béjaïa', 500),
+(7,  'Biskra', 700),
+(8,  'Béchar', 900),
+(9,  'Blida', 400),
+(10, 'Bouira', 500),
+(11, 'Tamanrasset', 1200),
+(12, 'Tébessa', 700),
+(13, 'Tlemcen', 600),
+(14, 'Tiaret', 600),
+(15, 'Tizi Ouzou', 500),
+(16, 'Alger', 300),
+(17, 'Djelfa', 600),
+(18, 'Jijel', 600),
+(19, 'Sétif', 600),
+(20, 'Saïda', 700),
+(21, 'Skikda', 600),
+(22, 'Sidi Bel Abbès', 600),
+(23, 'Annaba', 600),
+(24, 'Guelma', 600),
+(25, 'Constantine', 600),
+(26, 'Médéa', 500),
+(27, 'Mostaganem', 600),
+(28, 'M''Sila', 600),
+(29, 'Mascara', 600),
+(30, 'Ouargla', 800),
+(31, 'Oran', 500),
+(32, 'El Bayadh', 800),
+(33, 'Illizi', 1200),
+(34, 'Bordj Bou Arréridj', 600),
+(35, 'Boumerdès', 400),
+(36, 'El Tarf', 600),
+(37, 'Tindouf', 1200),
+(38, 'Tissemsilt', 700),
+(39, 'El Oued', 800),
+(40, 'Khenchela', 700),
+(41, 'Souk Ahras', 700),
+(42, 'Tipaza', 400),
+(43, 'Mila', 600),
+(44, 'Aïn Defla', 500),
+(45, 'Naâma', 800),
+(46, 'Aïn Témouchent', 600),
+(47, 'Ghardaïa', 800),
+(48, 'Relizane', 600),
+(49, 'Timimoun', 900),
+(50, 'Bordj Badji Mokhtar', 1200),
+(51, 'Ouled Djellal', 800),
+(52, 'Béni Abbès', 900),
+(53, 'In Salah', 1100),
+(54, 'In Guezzam', 1200),
+(55, 'Touggourt', 800),
+(56, 'Djanet', 1200),
+(57, 'El M''Ghair', 800),
+(58, 'El Meniaa', 900)
+ON CONFLICT (code) DO NOTHING;
