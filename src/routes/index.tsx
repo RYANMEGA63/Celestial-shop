@@ -111,10 +111,10 @@ function Home() {
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 grid-bg opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/70 to-primary/5" />
-        <div className="relative mx-auto grid max-w-[1400px] gap-8 px-3 py-10 sm:px-4 sm:py-16 md:grid-cols-2 md:py-20">
+        <div className="relative mx-auto max-w-[1400px] px-3 py-10 sm:px-4 sm:py-16 md:py-20">
           <div className="flex flex-col justify-center">
             <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-primary">
-              <Zap className="h-3 w-3" /> Nouveau · Dream PC Builder
+              <Zap className="h-3 w-3" /> Build your dream Pc
             </div>
             <h1 className="text-3xl font-bold leading-[1.05] tracking-tight sm:text-4xl md:text-6xl">
               Assemblez la machine
@@ -137,39 +137,6 @@ function Home() {
               </Button>
             </div>
           </div>
-
-          <div className="relative flex items-center justify-center">
-            <div className="w-full max-w-xl rounded-3xl border border-border bg-card/90 p-5 shadow-sm">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border bg-background p-4">
-                  <div className="font-mono text-[11px] uppercase tracking-widest text-primary">
-                    Catalogue plus lisible
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    On met les composants en avant avec des cartes plus compactes et plus nettes sur telephone.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border bg-background p-4">
-                  <div className="font-mono text-[11px] uppercase tracking-widest text-primary">
-                    Fiche produit laterale
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Quand on ouvre un produit, la fiche reste dans une sidebar a droite au lieu de prendre tout l ecran.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border bg-background p-4 sm:col-span-2">
-                  <div className="font-mono text-[11px] uppercase tracking-widest text-primary">
-                    Ce qu on construit
-                  </div>
-                  <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
-                    <li>PC gaming bien refroidis</li>
-                    <li>machines pro stables</li>
-                    <li>configs creation bien equilibrees</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -183,7 +150,7 @@ function Home() {
             to="/boutique"
             className="hidden font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-primary md:block"
           >
-            Voir tout →
+            Voir tout â†’
           </Link>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
@@ -224,7 +191,7 @@ function Home() {
               to="/boutique"
               className="font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-primary"
             >
-              Catalogue complet →
+              Catalogue complet â†’
             </Link>
           </div>
 
@@ -261,3 +228,4 @@ function Home() {
     </main>
   );
 }
+

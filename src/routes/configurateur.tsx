@@ -1,4 +1,4 @@
-﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
@@ -225,6 +225,16 @@ function Builder() {
     const modelCategoryIds = new Set((selectedModel.slots ?? []).map((s) => s.category_id));
     return categories.filter((c) => modelCategoryIds.has(c.id));
   }, [categories, selectedModel]);
+
+  const leftCategories = useMemo(() => {
+    const half = Math.ceil(visibleCategories.length / 2);
+    return visibleCategories.slice(0, half);
+  }, [visibleCategories]);
+
+  const rightCategories = useMemo(() => {
+    const half = Math.ceil(visibleCategories.length / 2);
+    return visibleCategories.slice(half);
+  }, [visibleCategories]);
 
   // Handle setting correct active category when model is loaded/cleared
   useEffect(() => {
@@ -606,335 +616,225 @@ function Builder() {
         </div>
       ) : (
         // ----------------------------------------------------------------
-        // MODE BUILDER LIBRE - LAYOUT ASYMMÉTRIQUE
+        // MODE BUILDER LIBRE - NEW PREMIUM LAYOUT
         // ----------------------------------------------------------------
-        <div className="grid gap-8 lg:grid-cols-12 items-start">
+        <div className="space-y-8 animate-fade-in">
           
-          {/* COLUMN LEFT: Bento Grid & Product Options Selector (col-span-8) */}
-          <div className="lg:col-span-7 xl:col-span-8 space-y-8">
+          {/* SECTION 1: TOP DASHBOARD (Preview HUD + Slots Summary) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             
-            {/* Bento Grid slots */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:grid-flow-dense">
-              {visibleCategories.map((cat, i) => {
-                const filled = !!build[cat.id];
-                const isActive = activeSlot === cat.id;
-                const isLocked = lockedSlots.has(cat.id);
-                const selectedProd = build[cat.id];
-                const IconComponent = getCategoryIcon(cat.slug);
+            {/* 1A: HOLOGRAPHIC PC PREVIEW HUD (col-span-5) */}
+            <div className="lg:col-span-5 rounded-2xl border border-border/30 bg-card/15 backdrop-blur-md relative overflow-hidden flex flex-col justify-between p-5 min-h-[350px]">
+              <div className="absolute inset-0 grid-bg opacity-25" />
+              
+              {/* Spinning technical rings */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                <div className="w-56 h-56 rounded-full border border-dashed border-sky-500 animate-[spin_50s_linear_infinite]" />
+                <div className="absolute w-72 h-72 rounded-full border border-sky-500/20 animate-[spin_70s_linear_infinite_reverse]" />
+                <div className="absolute w-40 h-40 rounded-full border border-sky-500/40 animate-[spin_30s_linear_infinite]" />
+              </div>
 
-                return (
-                  <div
-                    key={cat.id}
-                    onClick={() => setActiveSlot(cat.id)}
-                    className={`group relative flex flex-col justify-between rounded-xl p-4 transition-all duration-300 cursor-pointer border min-h-[110px] ${
-                      getBentoSpan(cat.slug)
-                    } ${
-                      isActive
-                        ? "bg-sky-950/15 border-sky-500/50 shadow-[0_0_20px_rgba(56,189,248,0.15)] ring-1 ring-sky-500/20"
-                        : filled
-                        ? "bg-card/40 border-border/40 hover:border-sky-500/30 hover:shadow-[0_0_15px_rgba(56,189,248,0.08)]"
-                        : "bg-card/20 border-border/20 opacity-70 hover:opacity-100 hover:border-sky-500/20"
-                    }`}
-                  >
-                    {/* Top bar: Category Name and Icons */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex flex-col">
-                        <span className="font-mono text-[9px] text-muted-foreground tracking-wider uppercase">
-                          {String(i + 1).padStart(2, "0")} . SLOT
-                        </span>
-                        <span className="font-semibold text-xs tracking-wide text-foreground mt-0.5">
-                          {cat.label}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {isLocked && <Lock className="h-3 w-3 text-orange-400 shrink-0" />}
-                        {filled && !isLocked && <Check className="h-3 w-3 text-emerald-400 shrink-0" />}
-                        <IconComponent
-                          className={`h-4.5 w-4.5 transition-all duration-300 ${
-                            isActive || filled
-                              ? "glow-cyan text-[#38bdf8]"
-                              : "text-muted-foreground group-hover:text-foreground"
-                          }`}
-                        />
-                      </div>
-                    </div>
+              {/* HUD Labels */}
+              <div className="absolute top-4 left-4 font-mono text-[9px] text-muted-foreground/60 tracking-widest flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
+                SYS.MONITOR // PC.BUILD.v3
+              </div>
+              <div className="absolute bottom-4 right-4 font-mono text-[9px] text-muted-foreground/60 tracking-widest">
+                ENGINEERING DEPT
+              </div>
 
-                    {/* Bottom part: Selected Product Details or Empty State */}
-                    <div className="mt-4 flex flex-col justify-end">
-                      {selectedProd ? (
-                        <div className="flex flex-col">
-                          <span className="font-mono text-[9px] uppercase text-muted-foreground tracking-wide truncate">
-                            {selectedProd.brand}
-                          </span>
-                          <span className="text-xs font-semibold text-foreground line-clamp-1">
-                            {selectedProd.name}
-                          </span>
-                          <span className="font-mono text-xs text-emerald-400 font-semibold mt-1" style={{ fontVariantNumeric: "tabular-nums" }}>
-                            {Number(selectedProd.price).toLocaleString("fr-FR")} DA
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-between text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors">
-                          <span className="font-mono text-[9px] uppercase tracking-wider">Non configuré</span>
-                          <span className="text-xs">+</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Product selection selector for active category */}
-            {options.length > 0 && !lockedSlots.has(activeSlot) && (
-              <div className="rounded-xl border border-border/40 bg-card/25 p-4 backdrop-blur-md sm:p-6">
-                <div className="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-border/30 pb-4 gap-2">
-                  <div>
-                    <h2 className="text-base font-bold tracking-wide text-foreground flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
-                      Configuration du Slot : {categories.find((c) => c.id === activeSlot)?.label}
-                    </h2>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      Intégrez ce composant à votre architecture matérielle.
-                    </p>
-                  </div>
-                  {build[activeSlot] && (
-                    <button
-                      onClick={() => removePart(activeSlot)}
-                      className="font-mono text-[10px] uppercase tracking-wider text-red-400 hover:underline self-start sm:self-auto"
-                    >
-                      Retirer le composant
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                  {options.map((p) => {
-                    const compat = compatible(p, activeCategorySlug, build);
-                    const isSelected = build[activeSlot]?.id === p.id;
+              {/* HUD Blueprint Indicators Overlay (Visual pointers) */}
+              <div className="absolute inset-0 p-4 flex justify-between pointer-events-none z-10 font-mono text-[9px]">
+                {/* Left indicators */}
+                <div className="flex flex-col justify-between h-[85%] my-auto items-start">
+                  {leftCategories.map((cat) => {
+                    const isFilled = !!build[cat.id];
+                    const isActive = activeSlot === cat.id;
                     return (
                       <div
-                        key={p.id}
-                        className={`group flex flex-col justify-between overflow-hidden rounded-xl border bg-card/30 backdrop-blur-sm transition-all duration-300 ${
-                          isSelected
-                            ? "border-emerald-500/50 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-                            : !compat.ok
-                            ? "border-destructive/20 opacity-50 hover:opacity-75"
-                            : "border-border/30 hover:border-sky-500/40 hover:shadow-[0_0_15px_rgba(56,189,248,0.1)]"
+                        key={cat.id}
+                        onClick={() => setActiveSlot(cat.id)}
+                        className={`bg-black/55 border rounded px-2 py-1 backdrop-blur-sm shadow-sm pointer-events-auto cursor-pointer transition-all duration-300 flex items-center gap-1.5 ${
+                          isActive
+                            ? "border-sky-500 text-sky-400 font-semibold"
+                            : isFilled
+                            ? "border-border/30 text-emerald-400"
+                            : "border-border/10 text-muted-foreground/80 hover:text-foreground"
                         }`}
                       >
-                        {/* Product image */}
-                        <button
-                          onClick={() => { setDetail(p); setOpen(true); }}
-                          className="relative aspect-[16/10] w-full overflow-hidden bg-muted/20 border-b border-border/30"
-                        >
-                          {p.image_url ? (
-                            <img
-                              src={p.image_url}
-                              alt={p.name}
-                              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-card/10 font-mono text-[10px] text-muted-foreground/60">
-                              Image indisponible
-                            </div>
-                          )}
-                          <div className="absolute top-2 right-2 rounded-md bg-black/60 px-2 py-0.5 font-mono text-[9px] text-white backdrop-blur-sm">
-                            {p.brand}
-                          </div>
-                        </button>
+                        <span className="uppercase text-[8px]">{cat.slug || cat.label}:</span>
+                        {isFilled ? (
+                          <span className="text-emerald-400 font-bold">LOADED</span>
+                        ) : (
+                          <span className="text-orange-400/80 animate-pulse font-medium">MISSING</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
-                        {/* Product details */}
-                        <div className="flex flex-1 flex-col p-4">
-                          <h3 className="line-clamp-1 font-semibold text-xs text-foreground tracking-wide">
-                            {p.name}
-                          </h3>
-                          <p className="mt-1 line-clamp-2 text-[11px] text-muted-foreground leading-normal flex-1">
-                            {p.tagline}
-                          </p>
-
-                          {/* Technical attributes */}
-                          {Object.keys(p.specs || {}).length > 0 && (
-                            <div className="mt-3 grid grid-cols-2 gap-x-2 gap-y-1 border-t border-border/10 pt-3 text-[9px] text-muted-foreground/80 font-mono">
-                              {Object.entries(p.specs).slice(0, 2).map(([k, v]) => (
-                                <div key={k} className="truncate">
-                                  <span className="opacity-60">{k}:</span> {v}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          <div className="mt-4 flex items-center justify-between gap-3 pt-2">
-                            <div className="font-mono text-sm font-bold text-emerald-400" style={{ fontVariantNumeric: "tabular-nums" }}>
-                              {Number(p.price).toLocaleString("fr-FR")} DA
-                            </div>
-                            <Button
-                              size="sm"
-                              disabled={!compat.ok}
-                              onClick={() => pickPart(p)}
-                              className={
-                                isSelected
-                                  ? "bg-emerald-600 text-white hover:bg-emerald-500 h-8"
-                                  : "bg-sky-600/90 text-white hover:bg-sky-500 h-8"
-                              }
-                            >
-                              {isSelected ? "Sélectionné" : "Choisir"}
-                            </Button>
-                          </div>
-
-                          {!compat.ok && (
-                            <div className="mt-3 flex items-start gap-1.5 rounded-lg border border-destructive/20 bg-destructive/5 p-2 font-mono text-[9px] text-destructive leading-normal">
-                              <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-                              <span>{compat.reason}</span>
-                            </div>
-                          )}
-                        </div>
+                {/* Right indicators */}
+                <div className="flex flex-col justify-between h-[85%] my-auto items-end">
+                  {rightCategories.map((cat) => {
+                    const isFilled = !!build[cat.id];
+                    const isActive = activeSlot === cat.id;
+                    return (
+                      <div
+                        key={cat.id}
+                        onClick={() => setActiveSlot(cat.id)}
+                        className={`bg-black/55 border rounded px-2 py-1 backdrop-blur-sm shadow-sm pointer-events-auto cursor-pointer transition-all duration-300 flex items-center gap-1.5 ${
+                          isActive
+                            ? "border-sky-500 text-sky-400 font-semibold"
+                            : isFilled
+                            ? "border-border/30 text-emerald-400"
+                            : "border-border/10 text-muted-foreground/80 hover:text-foreground"
+                        }`}
+                      >
+                        <span className="uppercase text-[8px]">{cat.slug || cat.label}:</span>
+                        {isFilled ? (
+                          <span className="text-emerald-400 font-bold">LOADED</span>
+                        ) : (
+                          <span className="text-orange-400/80 animate-pulse font-medium">MISSING</span>
+                        )}
                       </div>
                     );
                   })}
                 </div>
               </div>
-            )}
 
-            {/* Locked notices */}
-            {lockedSlots.has(activeSlot) && (
-              <div className="flex items-start gap-4 rounded-xl border border-orange-500/20 bg-orange-500/5 p-5 backdrop-blur-sm">
-                <Lock className="h-5 w-5 shrink-0 text-orange-400 mt-0.5" />
-                <div>
-                  <h4 className="text-xs font-bold text-orange-400 uppercase tracking-wider font-mono">Slot verrouillé par le modèle</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                    Ce slot est configuré de façon fixe pour le modèle "{selectedModel?.name}".
-                    Vous pouvez réinitialiser le modèle si vous souhaitez construire en mode libre.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Empty slots notice */}
-            {options.length === 0 && !lockedSlots.has(activeSlot) && (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/40 py-16 text-center bg-card/10">
-                <p className="font-mono text-xs text-muted-foreground">
-                  Aucun produit référencé dans cette catégorie.
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* COLUMN RIGHT: Sticky Summary Sidebar (col-span-4) */}
-          <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 space-y-6">
-            <div className="overflow-hidden rounded-xl border border-border/30 bg-card/30 backdrop-blur-md flex flex-col">
-              
-              {/* Header Info */}
-              <div className="border-b border-border/30 bg-muted/10 px-5 py-4 flex items-center justify-between">
-                <div>
-                  <div className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground/80">
-                    // Diagnostic & Aperçu
-                  </div>
-                  <div className="mt-0.5 text-sm font-semibold tracking-wide text-foreground">
-                    {selectedModel ? selectedModel.name : "Architecture Personnalisée"}
-                  </div>
-                </div>
-                <div className="rounded bg-sky-500/10 px-2 py-0.5 font-mono text-[9px] text-[#38bdf8] border border-sky-500/15">
-                  SYS.OK
-                </div>
-              </div>
-
-              {/* HUD PC Preview Container */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-card/10 to-background/5 border-b border-border/30 flex items-center justify-center p-6">
-                <div className="absolute inset-0 grid-bg opacity-30" />
-                
-                {/* HUD blueprint circles */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                  <div className="w-40 h-40 rounded-full border border-dashed border-sky-500 animate-[spin_40s_linear_infinite]" />
-                  <div className="absolute w-48 h-48 rounded-full border border-sky-500/30 animate-[spin_60s_linear_infinite_reverse]" />
-                </div>
-                <div className="absolute top-3 left-4 font-mono text-[8px] text-muted-foreground/50 tracking-wider">
-                  SYS.MONITOR // PC.BUILD.v2
-                </div>
-                <div className="absolute bottom-3 right-4 font-mono text-[8px] text-muted-foreground/50 tracking-wider">
-                  ENGINEERING STUDIO
-                </div>
-
+              {/* Central hologram image or empty state */}
+              <div className="flex-1 flex items-center justify-center p-6 z-10">
                 {previewProduct && previewProduct.image_url ? (
-                  <div className="relative flex h-full w-full items-center justify-center z-10">
+                  <div className="relative flex h-full w-full items-center justify-center">
                     <img
                       src={previewProduct.image_url}
                       alt={previewProduct.name}
-                      className="max-h-[85%] max-w-[85%] object-contain transition-transform duration-300 hover:scale-105"
+                      className="max-h-[220px] max-w-[85%] object-contain filter drop-shadow-[0_0_15px_rgba(56,189,248,0.3)] transition-transform duration-300 hover:scale-105"
                     />
-                    <div className="absolute bottom-0 left-0 rounded-md bg-black/70 px-2 py-1 font-mono text-[9px] text-white backdrop-blur-sm border border-border/20">
+                    <div className="absolute bottom-0 rounded-md bg-black/75 border border-sky-500/20 px-3 py-1 font-mono text-[9px] text-[#38bdf8] backdrop-blur-md">
                       {previewProduct.brand} {previewProduct.name}
                     </div>
                   </div>
                 ) : (
-                  <div className="absolute inset-6 flex flex-col items-center justify-center rounded-xl border border-dashed border-border/30 p-4 text-center z-10 bg-card/5 backdrop-blur-sm">
-                    <Wrench className="mb-2 h-6 w-6 text-muted-foreground/30 animate-pulse" />
-                    <div className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-                      Aucun boîtier sélectionné
+                  <div className="flex flex-col items-center justify-center text-center p-4">
+                    <Wrench className="h-10 w-10 text-muted-foreground/30 animate-pulse mb-3" />
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                      Aperçu Holographique
                     </div>
-                    <p className="mt-1 text-[9px] text-muted-foreground/50 max-w-[180px] leading-relaxed">
-                      Choisissez un boîtier pour projeter l'aperçu matériel du PC.
+                    <p className="mt-2 text-[10px] text-muted-foreground/50 max-w-[200px] leading-relaxed">
+                      Sélectionnez un boîtier ou un composant pour projeter sa silhouette 3D.
                     </p>
                   </div>
                 )}
               </div>
 
+            </div>
 
-              {/* Assembly info text block (free builder only) */}
-              {!selectedModel && <div className="px-5 py-3 border-b border-border/30 bg-muted/10">
-                <div className="flex items-start gap-3 text-muted-foreground">
-                  <Wrench className="h-4 w-4 text-[#38bdf8] shrink-0 mt-0.5 glow-cyan" />
-                  <div className="leading-normal">
-                    <div className="font-mono text-[9px] font-bold uppercase tracking-wider text-foreground">
-                      Assemblage & stress tests inclus
-                    </div>
-                    <div className="font-mono text-[8px] text-muted-foreground/80 mt-0.5">
-                      Câblage premium · tests de charge 24h · coût : {effectiveAssemblyCost} DA
-                    </div>
+            {/* 1B: SLOTS SUMMARY & CHECKOUT PANEL (col-span-7) */}
+            <div className="lg:col-span-7 flex flex-col justify-between gap-4">
+              
+              {/* Slot-by-Slot Grid */}
+              <div className="rounded-2xl border border-border/30 bg-card/25 backdrop-blur-md p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between border-b border-border/10 pb-3 mb-4">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#38bdf8]">
+                      // État des modules matériels
+                    </span>
+                    <span className="font-mono text-[9px] text-muted-foreground">
+                      {filledCount} / {visibleCategories.length} CONFIGURÉS
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {visibleCategories.map((cat) => {
+                      const selectedProd = build[cat.id];
+                      const isLocked = lockedSlots.has(cat.id);
+                      const IconComponent = getCategoryIcon(cat.slug);
+                      const isActive = activeSlot === cat.id;
+
+                      return (
+                        <div
+                          key={cat.id}
+                          onClick={() => setActiveSlot(cat.id)}
+                          className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-300 cursor-pointer ${
+                            isActive
+                              ? "bg-sky-500/10 border-sky-500/40 ring-1 ring-sky-500/20"
+                              : selectedProd
+                              ? "bg-card/40 border-border/40 hover:border-sky-500/20"
+                              : "bg-card/10 border-border/10 opacity-70 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg shrink-0 ${
+                            selectedProd ? "bg-emerald-500/10 text-emerald-400" : "bg-muted/10 text-muted-foreground"
+                          }`}>
+                            <IconComponent className="h-4 w-4" />
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="font-mono text-[8px] text-muted-foreground uppercase tracking-wider truncate">
+                              {cat.label}
+                            </div>
+                            <div className={`text-xs font-semibold truncate ${
+                              selectedProd ? "text-foreground" : "text-muted-foreground/60 italic"
+                            }`}>
+                              {selectedProd ? selectedProd.name : "Non sélectionné"}
+                            </div>
+                          </div>
+
+                          <div className="text-right shrink-0">
+                            {isLocked ? (
+                              <Lock className="h-3 w-3 text-orange-400 ml-auto" />
+                            ) : selectedProd ? (
+                              <span className="font-mono text-[10px] text-emerald-400 font-semibold" style={{ fontVariantNumeric: "tabular-nums" }}>
+                                {Number(selectedProd.price).toLocaleString("fr-FR")} DA
+                              </span>
+                            ) : (
+                              <span className="text-[10px] text-muted-foreground/40">--</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              </div>}
 
-              {/* Price Breakdown */}
-              <div className="px-5 py-4 bg-muted/5 space-y-2 text-xs font-mono">
-                {!selectedModel && <div className="flex justify-between text-muted-foreground">
-                  <span>Composants</span>
-                  <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {totalPrice.toLocaleString("fr-FR")} DA
-                  </span>
-                </div>}
-                {!selectedModel && <div className="flex justify-between text-muted-foreground">
-                  <span>Montage expert</span>
-                  <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {effectiveAssemblyCost.toLocaleString("fr-FR")} DA
-                  </span>
-                </div>}
-                {selectedModel && <div className="flex justify-between text-muted-foreground">
-                  <span>Modèle PC</span>
-                  <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {Number(selectedModel.fixed_price ?? 0).toLocaleString("fr-FR")} DA
-                  </span>
-                </div>}
-                <div className="border-t border-border/20 pt-3 flex items-baseline justify-between text-foreground">
-                  <span className="font-semibold text-xs tracking-wider">TOTAL TTC</span>
-                  <span className="text-xl font-bold text-emerald-400" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {grandTotal.toLocaleString("fr-FR")} DA
-                  </span>
+                {/* Sub-total breakdown / Assembly info */}
+                <div className="mt-5 pt-4 border-t border-border/10 flex flex-wrap gap-4 items-center justify-between text-xs font-mono text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <Wrench className="h-3.5 w-3.5 text-[#38bdf8] glow-cyan" />
+                    <span>Montage Expert & Stress Tests : </span>
+                    <span className="text-foreground font-semibold">
+                      {effectiveAssemblyCost.toLocaleString("fr-FR")} DA
+                    </span>
+                  </div>
+                  <div className="text-[10px] bg-sky-500/10 text-[#38bdf8] border border-sky-500/15 rounded-md px-2 py-0.5">
+                    GARANTIE COMPATIBILITÉ ACTIVE
+                  </div>
                 </div>
               </div>
 
-              {/* Add to Cart CTA */}
-              <div className="p-4 border-t border-border/30 bg-muted/10">
+              {/* Total & Checkout Panel */}
+              <div className="rounded-2xl border border-border/30 bg-gradient-to-r from-card/30 to-card/50 backdrop-blur-md p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex flex-col items-center sm:items-start">
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                    Total Configuration
+                  </span>
+                  <div className="flex items-baseline gap-1.5 mt-0.5">
+                    <span className="text-2xl font-black text-emerald-400 font-mono" style={{ fontVariantNumeric: "tabular-nums" }}>
+                      {grandTotal.toLocaleString("fr-FR")}
+                    </span>
+                    <span className="text-xs font-bold text-emerald-400 font-mono">DA</span>
+                    <span className="text-[9px] text-muted-foreground ml-1.5">TTC</span>
+                  </div>
+                </div>
+
                 <Button
                   disabled={filledCount === 0}
                   onClick={() => {
                     if (selectedModel) {
                       const configuredSlots: PcModelSlot[] = (selectedModel.slots ?? []).map((slot) => {
                         const product = build[slot.category_id] ?? slot.product;
-                        return {
-                          ...slot,
-                          product,
-                        };
+                        return { ...slot, product };
                       });
                       addModel(selectedModel, configuredSlots, grandTotal);
                       toast.success(`${selectedModel.name} ajouté au panier !`);
@@ -949,17 +849,206 @@ function Builder() {
                       toast.success("Votre PC personnalisé a été ajouté au panier !");
                     }
                   }}
-                  className="w-full bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white font-mono text-xs uppercase tracking-wider py-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] neon-pulse-btn"
+                  className="w-full sm:w-auto bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white font-mono text-xs uppercase tracking-wider px-8 py-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] neon-pulse-btn shrink-0"
                 >
                   <ShoppingCart className="mr-2 h-4 w-4 shrink-0" />
-                  {filledCount === 0
-                    ? "Sélectionnez vos composants"
-                    : `Ajouter au panier`}
+                  {filledCount === 0 ? "SÉLECTIONNEZ DES COMPOSANTS" : "AJOUTER AU PANIER"}
                 </Button>
               </div>
 
             </div>
-          </aside>
+
+          </div>
+
+          {/* SECTION 2: COMPONENT SELECTION HUB */}
+          <div className="rounded-2xl border border-border/30 bg-card/15 backdrop-blur-md p-5 space-y-6">
+            
+            {/* 2A: SLOT SWITCHER BUTTONS ROW */}
+            <div>
+              <div className="mb-3 font-mono text-[10px] uppercase tracking-widest text-[#38bdf8]">
+                // Choisir le module de configuration
+              </div>
+              
+              <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-thin scrollbar-thumb-sky-500/20 scrollbar-track-transparent">
+                {visibleCategories.map((cat) => {
+                  const isSelected = activeSlot === cat.id;
+                  const isFilled = !!build[cat.id];
+                  const isLocked = lockedSlots.has(cat.id);
+                  const IconComponent = getCategoryIcon(cat.slug);
+
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveSlot(cat.id)}
+                      className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 font-mono text-xs uppercase tracking-wider transition-all duration-300 border ${
+                        isSelected
+                          ? "bg-sky-500/10 text-[#38bdf8] border-[#38bdf8]/40 ring-1 ring-sky-500/20 shadow-[0_0_15px_rgba(56,189,248,0.1)]"
+                          : isFilled
+                          ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10"
+                          : "bg-card/40 text-muted-foreground border-border/40 hover:text-foreground hover:border-sky-500/20"
+                      }`}
+                    >
+                      {isLocked ? (
+                        <Lock className="h-3.5 w-3.5 text-orange-400 shrink-0" />
+                      ) : isFilled ? (
+                        <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      ) : (
+                        <IconComponent className="h-3.5 w-3.5 shrink-0" />
+                      )}
+                      <span>{cat.label}</span>
+                      {isFilled && build[cat.id] && (
+                        <span className="text-[10px] text-emerald-500/80 font-bold ml-1">
+                          [${Number(build[cat.id].price).toLocaleString("fr-FR")} DA]
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2B: SINGLE HORIZONTAL SCROLL PRODUCT LIST */}
+            <div className="border-t border-border/10 pt-6">
+              
+              {/* If slot is locked */}
+              {lockedSlots.has(activeSlot) ? (
+                <div className="flex items-center gap-4 rounded-xl border border-orange-500/20 bg-orange-500/5 p-6 max-w-2xl mx-auto backdrop-blur-sm">
+                  <Lock className="h-6 w-6 shrink-0 text-orange-400 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-orange-400 uppercase tracking-wider font-mono">Module verrouillé</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                      Le composant de ce slot est fixé par le modèle "${selectedModel?.name}".
+                      Pour pouvoir modifier ce composant en toute liberté, vous pouvez réinitialiser le modèle actif en haut de la page.
+                    </p>
+                  </div>
+                </div>
+              ) : options.length === 0 ? (
+                /* Empty state */
+                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/30 py-16 text-center bg-card/5">
+                  <Wrench className="h-8 w-8 text-muted-foreground/30 mb-2 animate-pulse" />
+                  <p className="font-mono text-xs text-muted-foreground">
+                    Aucun produit référencé dans la catégorie "${categories.find(c => c.id === activeSlot)?.label}".
+                  </p>
+                </div>
+              ) : (
+                /* Horizontal Scroll Container */
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-[#38bdf8] flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+                      Options disponibles (${options.length})
+                    </div>
+                    {build[activeSlot] && (
+                      <button
+                        onClick={() => removePart(activeSlot)}
+                        className="font-mono text-[10px] uppercase tracking-wider text-red-400 hover:text-red-300 hover:underline transition-colors"
+                      >
+                        Retirer le composant actuel
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex gap-4 overflow-x-auto pb-5 pt-1 px-1 scroll-smooth scrollbar-thin scrollbar-thumb-sky-500/20 scrollbar-track-transparent">
+                    {options.map((p) => {
+                      const compat = compatible(p, activeCategorySlug, build);
+                      const isSelected = build[activeSlot]?.id === p.id;
+                      
+                      return (
+                        <div
+                          key={p.id}
+                          className={`flex flex-col justify-between overflow-hidden rounded-2xl border bg-card/30 backdrop-blur-sm transition-all duration-300 w-[290px] shrink-0 ${
+                            isSelected
+                              ? "border-emerald-500/50 ring-1 ring-emerald-500/25 shadow-[0_0_20px_rgba(16,185,129,0.15)] bg-emerald-500/5"
+                              : !compat.ok
+                              ? "border-destructive/20 opacity-50 hover:opacity-75"
+                              : "border-border/30 hover:border-sky-500/40 hover:shadow-[0_0_20px_rgba(56,189,248,0.1)] hover:bg-card/45"
+                          }`}
+                        >
+                          {/* Image Selector / Details Trigger */}
+                          <button
+                            onClick={() => { setDetail(p); setOpen(true); }}
+                            className="relative aspect-[16/10] w-full overflow-hidden bg-muted/10 border-b border-border/20 group"
+                          >
+                            {p.image_url ? (
+                              <img
+                                src={p.image_url}
+                                alt={p.name}
+                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center font-mono text-[9px] text-muted-foreground/50">
+                                IMAGE NON DISPONIBLE
+                              </div>
+                            )}
+                            <div className="absolute top-3 right-3 rounded-md bg-black/70 border border-border/20 px-2 py-0.5 font-mono text-[9px] text-white backdrop-blur-sm">
+                              {p.brand}
+                            </div>
+                          </button>
+
+                          {/* Body */}
+                          <div className="flex flex-1 flex-col p-4 justify-between min-h-[160px]">
+                            <div>
+                              <h3 className="line-clamp-1 font-bold text-xs text-foreground tracking-wide">
+                                {p.name}
+                              </h3>
+                              <p className="mt-1 line-clamp-2 text-[10px] text-muted-foreground leading-relaxed">
+                                {p.tagline}
+                              </p>
+
+                              {/* Specs */}
+                              {Object.keys(p.specs || {}).length > 0 && (
+                                <div className="mt-3 grid grid-cols-2 gap-x-2 gap-y-1 border-t border-border/10 pt-3 text-[9px] text-muted-foreground/70 font-mono">
+                                  {Object.entries(p.specs).slice(0, 2).map(([k, v]) => (
+                                    <div key={k} className="truncate">
+                                      <span className="opacity-60 text-muted-foreground">key:</span> {v}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Price / Compatibility Warning / Button */}
+                            <div className="mt-4 pt-2 border-t border-border/10 space-y-2">
+                              {!compat.ok && (
+                                <div className="flex items-start gap-1.5 rounded-lg border border-destructive/20 bg-destructive/5 p-2 font-mono text-[8px] text-destructive leading-normal">
+                                  <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                                  <span className="line-clamp-2">{compat.reason}</span>
+                                </div>
+                              )}
+
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="font-mono text-sm font-bold text-emerald-400" style={{ fontVariantNumeric: "tabular-nums" }}>
+                                  {Number(p.price).toLocaleString("fr-FR")} DA
+                                </div>
+                                <Button
+                                  size="sm"
+                                  disabled={!compat.ok}
+                                  onClick={() => pickPart(p)}
+                                  className={`font-mono text-[10px] uppercase tracking-wider px-3 h-8 rounded-lg ${
+                                    isSelected
+                                      ? "bg-emerald-600 text-white hover:bg-emerald-500"
+                                      : "bg-sky-600 text-white hover:bg-sky-500"
+                                  }`}
+                                >
+                                  {isSelected ? (
+                                    <span className="flex items-center gap-1">
+                                      <Check className="h-3 w-3" /> Selected
+                                    </span>
+                                  ) : "Choisir"}
+                                </Button>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+          </div>
 
         </div>
       )}
